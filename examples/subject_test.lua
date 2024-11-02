@@ -1,5 +1,5 @@
 -- (c) 2024 Jacek Olszak
--- This code is licensed under MIT license (see LICENSE for details)
+-- This code is licensed under CC BY-NC-SA 4.0 License (see LICENSE for details)
 
 include "subject.lua" -- include the "production" code which will be tested here
 

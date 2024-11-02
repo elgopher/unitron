@@ -1,5 +1,5 @@
 -- (c) 2024 Jacek Olszak
--- This code is licensed under MIT license (see LICENSE for details)
+-- This code is licensed under CC BY-NC-SA 4.0 License (see LICENSE for details)
 -- runner is a seperate application spawn by gui in a dedicated process. Therefore tests which are run does not block game loop.
 
 include "api.lua"
