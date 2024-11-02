@@ -198,6 +198,15 @@ function _init()
 				{ argv = { test_file }, path = work_dir, window_attribs = { autoclose = true } })
 		end
 
+		local text_area = attach_textarea(gui, { x = 0, y = 97, width = width, height = 103 })
+
+		test_tree = attach_tree(gui, { x = 0, y = 16, width = width, height = 80 })
+		function test_tree:select(e)
+			selected_test = e.id
+			local lines = printed_lines:lines(e.id)
+			text_area:set_lines(lines)
+		end
+
 		local toolbar = gui:attach { x = 0, y = 0, width = width, height = 16 }
 		function toolbar:draw()
 			rectfill(0, 0, self.width, self.height, toolbar_color)
@@ -255,15 +264,6 @@ function _init()
 		-- 	spr(2)
 		-- 	pal()
 		-- end
-
-		local text_area = attach_textarea(gui, { x = 0, y = 100, width = width, height = 100 })
-
-		test_tree = attach_tree(gui, { x = 0, y = 16, width = width, height = 80 })
-		function test_tree:select(e)
-			selected_test = e.id
-			local lines = printed_lines:lines(e.id)
-			text_area:set_lines(lines)
-		end
 
 		run_tests_in_seperate_process()
 	end
