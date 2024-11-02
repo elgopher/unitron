@@ -6,15 +6,15 @@ Unit testing in Picotron.
 
 ## How to use?
 
-* download cart from [releases page](https://github.com/elgopher/unitron/releases) and put it somewhere on Picotron drive (desktop for example)
-* run the cart
-* create a file with test code:
+* download cart png from [releases page](https://github.com/elgopher/unitron/releases) and put it somewhere on Picotron drive (desktop for example)
+* run the cart by double clicking 
+* create a Lua file with following test code:
 
 ```lua
 assert_eq("hello", "hello")
 ```
 
-* drag'n'drop the file to unitron window
+* drag and drop the file to unitron window
 * see [examples](examples) folder for details how to write tests
 
 ## Development - how to work on unitron
