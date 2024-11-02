@@ -7,7 +7,8 @@ test("compare strings", function()
     local s = concat("hello ", "world")
     -- change with assert_not_eq to get test error:
     assert_eq("hello world", s)                                
-    -- assertions can have optional message which is presented in the runner: 
+    -- assertions can have optional message which is presented in the unitron's
+    -- user interface: 
     assert_eq("hello world", s, "should return \"hello world\"")
 end)
 
@@ -86,9 +87,9 @@ test("table driven tests", function()
     end
 end)
 
--- test can be slow, but don't worry - it does not block the runner UI
+-- test can be slow, but don't worry - it does not block the unitron ui
 test("slow test", function ()
     for i = 1, 1000000 do
-        spr(0, 30, 30) -- drawing sprites does not breaks the runner UI  
+        spr(0, 30, 30) -- drawing sprites also does not break the unitron ui
     end
 end)
