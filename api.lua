@@ -117,7 +117,7 @@ end
 ---
 ---@param expected any
 ---@param actual any
----@param msg? any message which will be presented in the runner.
+---@param msg? any message which will be presented in the unitron ui.
 function assert_eq(expected, actual, msg)
 	if not equal(expected, actual) then
 		local err = {
