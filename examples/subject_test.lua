@@ -85,3 +85,10 @@ test("table driven tests", function()
         end)
     end
 end)
+
+-- test can be slow, but don't worry - it does not block the runner UI
+test("slow test", function ()
+    for i = 1, 1000000 do
+        spr(0, 30, 30) -- drawing sprites does not breaks the runner UI  
+    end
+end)
