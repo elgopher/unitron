@@ -11,7 +11,7 @@ local run_btn, stop_btn, toggle_btn
 local test_tree
 
 local runner_pid
-local function stop_runner() 
+local function stop_test() 
 	if runner_pid != nil then
 		send_message(2, { event = "kill_process", proc_id = runner_pid, exit_code = 1 })
 		runner_pid = nil
@@ -177,16 +177,11 @@ function _init()
 	-- 	end
 	-- }
 
-	print("please drag'n'drop test file here")
-
-	on_event("drop_items", function(msg)
-		stop_runner()
-
+	-- item has filename and fullpath attributes
+	local function start_test(item)
 		gui = create_gui()
 
 		cls(7)
-
-		local item = msg.items[1]
 
 		local test_file = item.filename
 		local work_dir = item.fullpath:sub(1, #item.fullpath - #item.filename)
@@ -203,7 +198,7 @@ function _init()
 				{ argv = { test_file }, path = work_dir, window_attribs = { autoclose = true } })
 		end
 
-		toolbar = gui:attach { x = 0, y = 0, width = width, height = 16 }
+		local toolbar = gui:attach { x = 0, y = 0, width = width, height = 16 }
 		function toolbar:draw()
 			rectfill(0, 0, self.width, self.height, toolbar_color)
 		end
@@ -233,7 +228,7 @@ function _init()
 
 		stop_btn = toolbar:attach_button { x = 22, y = 4, width = 10 }
 		function stop_btn:click()
-			stop_runner()
+			stop_test()
 		end
 
 		function stop_btn:update()
@@ -271,7 +266,22 @@ function _init()
 		end
 
 		run_tests_in_seperate_process()
-	end)
+	end
+
+	local run_from_the_browser = env().parent_pid == 1
+	if run_from_the_browser then
+		start_test {
+			filename = "subject_test.lua",
+			fullpath = "examples/subject_test.lua",
+		}
+	else
+		print("please drag'n'drop test file here")
+		on_event("drop_items", function (msg)
+			stop_test()
+			local item = msg.items[1]
+			start_test(item)
+		end)
+	end
 end
 
 function _update()
