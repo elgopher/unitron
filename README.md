@@ -29,7 +29,7 @@ Over time, the code of your functions becomes more and more complex. Functions t
 Which code should be unit tested?
 =================================
 
-Only the code whose behavior changes very rarely. Behavior describes the effect of executing some code - for example, running the `add` function on two numbers adds these numbers together and returns the result. What the result will be is predetermined - the arithmetic will never change here. Any reusable functions and objects that you use in multiple places in your games are potentially code that you can write unit tests against. They are so generic that they are unlikely to change very often. Moreover, over time, your game's code will become more and more stable - that is, it will not change significantly. Then you can extract functions and objects from it and write tests for them. 
+Only the code whose behavior changes very rarely. Behavior describes the effect of executing some code - for example, running the `add` function on two numbers adds these numbers together and returns the result. What the result will be is predetermined - the arithmetic will never change here. Any reusable functions and objects that you currently use in multiple places in your games are potentially code that you can write unit tests against. They are so generic that they are unlikely to change very often. Moreover, over time, your game's code will become more and more stable - that is, it will not change significantly. Then you can extract functions and objects from it and write tests for them. 
 
 In my opinion, writing tests while prototyping a game makes no sense. The only exception is writing tests just for educational purposes :)
 
@@ -57,6 +57,8 @@ Tests can be slow. That's why unitron runs them in the background - in a separat
 Tests can do whatever they want - they can use any function provided by Picotron. For example, they can draw on screen. The effect will not be visible, because tests are executed in a separate process.
 
 When assertion inside test failed, the test is stopped immediately. Functions stop and no more code is executed from the test. If test had more assertions they are not executed. If test had more subtests they are not executed as well. Parent test is marked as failed, as well as parent of the parent (all way up to the root). On the other hand, parent's subtests are executed normally.
+
+See [examples](examples) for tutorial-like instructions how to write unit tests in unitron.
 
 [Back to TOC](#test-api)
 
