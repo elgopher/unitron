@@ -93,3 +93,35 @@ test("slow test", function ()
         spr(0, 30, 30) -- drawing sprites also does not break the unitron ui
     end
 end)
+
+-- sometimes you want to reuse variables in multiple tests. Reusing
+-- state between tests is not a good idea, because tests should be
+-- independent. However, there is a way to reuse variables and still
+-- have independent tests. You can use a setup function which will
+-- re-initialize these variables on the beginning of each test.
+test("test with setup function", function()
+    local player1, player2 -- these variables will be reused
+ 
+    -- setup will be run on the beginning of each test:
+    local function setup()
+        player1 = new_player()
+        player1.position = 1
+        player2 = new_player()  
+        player2.position = 2
+    end
+
+    test("players should collide", function ()
+        setup() -- initialize players
+        -- following line modifies player2, so the next test will be
+        -- affected, if the player2 is not re-initialized
+        player2.position = player1.position
+        assert(player1:collides(player2))
+    end)
+    
+    test("players should not collide", function ()
+        -- initialize players again. setup will override local player variables:
+        setup()  
+        assert(not player1:collides(player2))
+    end)
+
+end)
