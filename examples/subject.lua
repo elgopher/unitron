@@ -23,3 +23,12 @@ end
 function add(left, right)
     return left + right
 end
+
+---@return table
+function new_player()
+    local player = { position = 0 }
+    function player:collides(other_player)
+        return player.position == other_player.position
+    end
+    return player
+end
