@@ -19,6 +19,20 @@ assert_eq("hello", "hello")
 * drag and drop the file to unitron window
 * see [examples](examples) folder for details how to write tests
 
+Why to write unit tests?
+========================
+
+Because you want to make sure that the functions you use in your game work as intended and do not cause errors that the player himself will notice. By observing the operation of the entire program, it is difficult to verify whether a function used somewhere at the bottom of your program actually works. Unit tests allow you to verify whether a function works as intended and how it deals with edge cases.
+
+Over time, the code of your functions becomes more and more complex. Functions that were simple at the beginning start to look like spaghetti - whether it's due to subsequent if statements added or optimizations you introduced to make the game run at 60 fps. So you need to go back to that code every now and then and clean it up. However, making changes to existing code involves the risk of making mistakes. So you have to be very careful when making changes and then manually verifying them. However, if you have unit tests for this code, you just need to run these tests again after each change to the code. The tests are quick and will give you results in a fraction of a second. Manual testing would take much longer. Having unit tests actually encourages you to come back to your code often and improve it.
+
+Which code should be unit tested?
+=================================
+
+Only the code whose behavior changes very rarely. Behavior describes the effect of executing some code - for example, running the `add` function on two numbers adds these numbers together and returns the result. What the result will be is predetermined - the arithmetic will never change here. Any reusable functions and objects that you use in multiple places in your games are potentially code that you can write unit tests against. They are so generic that they are unlikely to change very often. Moreover, over time, your game's code will become more and more stable - that is, it will not change significantly. Then you can extract functions and objects from it and write tests for them. 
+
+In my opinion, writing tests while prototyping a game makes no sense. The only exception is writing tests just for educational purposes :)
+
 Test API
 ========
 
