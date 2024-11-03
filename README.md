@@ -42,6 +42,8 @@ Tests can be slow. That's why unitron runs them in the background - in a separat
 
 Tests can do whatever they want - they can use any function provided by Picotron. For example, they can draw on screen. The effect will not be visible, because tests are executed in a separate process.
 
+When assertion inside test failed, the test is stopped immediately. Functions stop and no more code is executed from the test. If test had more assertions they are not executed. If test had more subtests they are not executed as well. Parent test is marked as failed, as well as parent of the parent (all way up to the root). On the other hand, parent's subtests are executed normally.
+
 [Back to TOC](#test-api)
 
 test
