@@ -2,7 +2,7 @@
 -- This code is licensed under MIT license (see LICENSE for details)
 
 if #env().argv == 0 then
-	include "gui.lua"
-else 
+	include "gui/gui.lua"
+else
 	include "cli.lua"
 end
