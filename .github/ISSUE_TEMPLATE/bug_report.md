@@ -27,7 +27,7 @@ If applicable, add screenshots to help explain your problem.
 0.1.1D
 
 **Unitron version**
-0.2.0
+0.3.0
 
 **Additional context**
 Add any other context about the problem here.
