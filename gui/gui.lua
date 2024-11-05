@@ -3,10 +3,10 @@
 
 local gui, test_tree
 
-include "gui_tree.lua"
-include "gui_textarea.lua"
-include "gui_lights.lua"
-include "gui_test_summary.lua"
+include "gui/tree.lua"
+include "gui/textarea.lua"
+include "gui/lights.lua"
+include "gui/test_summary.lua"
 
 
 local run_btn, stop_btn, toggle_btn
