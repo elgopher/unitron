@@ -5,13 +5,17 @@ local gui, test_tree
 
 include "gui_tree.lua"
 include "gui_textarea.lua"
+include "gui_lights.lua"
+include "gui_test_summary.lua"
 
 
 local run_btn, stop_btn, toggle_btn
 local test_tree
+local lights
+local test_summary
 
 local runner_pid
-local function stop_test() 
+local function stop_test()
 	if runner_pid != nil then
 		send_message(2, { event = "kill_process", proc_id = runner_pid, exit_code = 1 })
 		runner_pid = nil
@@ -65,6 +69,9 @@ on_event("test_started", function(e)
 		-- discard events from old runners
 		return
 	end
+
+	lights:set_light(e.test.id, 5)
+
 	local parent_id
 	if e.test.parent != nil then parent_id = e.test.parent.id end
 	test_tree:add_child(e.test.id, e.test.name .. " (running)", parent_id)
@@ -77,6 +84,14 @@ on_event("test_finished", function(e)
 	if e._from != runner_pid then
 		-- discard events from old runners
 		return
+	end
+
+	if e.error == nil then
+		lights:set_light(e.test.id, 26)
+		test_summary:inc_succeded()
+	else
+		lights:set_light(e.test.id, 8)
+		test_summary:inc_failed()
 	end
 
 	local color
@@ -145,7 +160,7 @@ on_event("print", function(e)
 		-- discard events from old runners
 		return
 	end
-	
+
 	printed_lines:print(e.test.id, e.text)
 end)
 
@@ -156,7 +171,7 @@ on_event("done", function(e)
 	end
 
 	runner_pid = nil
-	test_tree:select { id = e.root_test_id }
+	-- test_tree:select { id = e.root_test_id }
 end)
 
 function _init()
@@ -200,11 +215,18 @@ function _init()
 
 		local text_area = attach_textarea(gui, { x = 0, y = 97, width = width, height = 103 })
 
+		test_summary = attach_test_summary(gui, { x = 8, y = 102, width = 150, height = 10 })
+
+		lights = attach_lights(gui, { x = 8, y = 115, width = 264, height = 78 })
+
 		test_tree = attach_tree(gui, { x = 0, y = 16, width = width, height = 80 })
 		function test_tree:select(e)
 			selected_test = e.id
 			local lines = printed_lines:lines(e.id)
 			text_area:set_lines(lines)
+
+			lights:detach()
+			test_summary:detach()
 		end
 
 		local toolbar = gui:attach { x = 0, y = 0, width = width, height = 16 }
@@ -214,7 +236,7 @@ function _init()
 
 		run_btn = toolbar:attach_button { x = 6, y = 4, width = 10 }
 		function run_btn:click()
-			run_tests_in_seperate_process()
+			start_test(item)
 		end
 
 		function run_btn:update()
@@ -276,7 +298,7 @@ function _init()
 		}
 	else
 		print("please drag'n'drop test file here")
-		on_event("drop_items", function (msg)
+		on_event("drop_items", function(msg)
 			stop_test()
 			local item = msg.items[1]
 			start_test(item)
