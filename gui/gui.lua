@@ -217,16 +217,23 @@ function _init()
 
 		test_summary = attach_test_summary(gui, { x = 8, y = 102, width = 150, height = 10 })
 
-		lights = attach_lights(gui, { x = 8, y = 115, width = 264, height = 78 })
-
-		test_tree = attach_tree(gui, { x = 0, y = 16, width = width, height = 80 })
-		function test_tree:select(e)
-			selected_test = e.id
-			local lines = printed_lines:lines(e.id)
+		local function select_test(test_id)
+			local lines = printed_lines:lines(test_id)
 			text_area:set_lines(lines)
 
 			lights:detach()
 			test_summary:detach()
+		end
+
+		lights = attach_lights(gui, { x = 8, y = 115, width = 264, height = 78 })
+		function lights:select(selected_test)
+			select_test(selected_test)
+			-- TODO should move test tree too
+		end
+
+		test_tree = attach_tree(gui, { x = 0, y = 16, width = width, height = 80 })
+		function test_tree:select(e)
+			select_test(e.id)
 		end
 
 		local toolbar = gui:attach { x = 0, y = 0, width = width, height = 16 }
