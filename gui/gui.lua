@@ -150,6 +150,7 @@ on_event("test_finished", function(e)
 	end
 
 	print_line(e.test, message)
+	print_line(e.test, "")
 
 	test_tree:update_child_text(e.test.id, color .. e.test.name)
 	-- update text for all parents
