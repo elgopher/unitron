@@ -7,28 +7,29 @@
 ---@param right string
 ---@return string
 function concat(left, right)
-    return left .. right
+	return left .. right
 end
 
 ---@param left number
 ---@param right number
 ---@return number
 function divide(left, right)
-    return left / right
+	return left / right
 end
 
 ---@param left number
 ---@param right number
 ---@return number
 function add(left, right)
-    return left + right
+	return left + right
 end
 
 ---@return table
 function new_player()
-    local player = { position = 0 }
-    function player:collides(other_player)
-        return player.position == other_player.position
-    end
-    return player
+	local player = { position = 0 }
+	function player:collides(other_player)
+		return player.position == other_player.position
+	end
+
+	return player
 end

@@ -20,7 +20,7 @@ on_event("test_finished", function(e)
 end)
 
 on_event("print", function(e)
-	printh("test " .. e.test.id .. ": " .. e.text) -- print to stdout, because Picotron's terminal has limited size. 
+	printh("test " .. e.test.id .. ": " .. e.text) -- print to stdout, because Picotron's terminal has limited size.
 end)
 
 on_event("done", function(e)
@@ -43,4 +43,3 @@ runner_pid = create_process("runner.lua",
 
 function _update() -- run in the background
 end
-
