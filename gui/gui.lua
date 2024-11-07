@@ -229,7 +229,7 @@ function _init()
 		lights = attach_lights(gui, { x = 8, y = 115, width = 264, height = 78 })
 		function lights:select(selected_test)
 			select_test(selected_test)
-			-- TODO should move test tree too
+			test_tree:select_child(selected_test)
 		end
 
 		test_tree = attach_tree(gui, { x = 0, y = 16, width = width, height = 80 })
