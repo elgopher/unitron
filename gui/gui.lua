@@ -76,7 +76,7 @@ on_event("test_started", function(e)
 	if e.test.parent != nil then parent_id = e.test.parent.id end
 	test_tree:add_child(e.test.id, e.test.name .. " (running)", parent_id)
 
-	print_line(e.test, "Running " .. e.test.name)
+	print_line(e.test, "\f5Running \f7" .. e.test.name)
 	sfx(1)
 end)
 
@@ -98,11 +98,11 @@ on_event("test_finished", function(e)
 	local message
 
 	if e.error == nil then
-		message = "Test successful"
+		message = "\fbTest successful"
 		color = "\fb"
 	else
 		if e.error.file != nil then
-			print_line(e.test, "Error at " .. e.error.file)
+			print_line(e.test, "\f8Error \f7at " .. e.error.file)
 
 			local err = e.error
 			-- print additional message provided by user
@@ -145,7 +145,7 @@ on_event("test_finished", function(e)
 			end
 		end
 
-		message = "Test failed"
+		message = "\f8Test failed"
 		color = "\f8"
 	end
 
