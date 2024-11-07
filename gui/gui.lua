@@ -88,7 +88,7 @@ on_event("test_finished", function(e)
 
 	if e.error == nil then
 		lights:set_light(e.test.id, 26)
-		test_summary:inc_succeded()
+		test_summary:inc_succeeded()
 	else
 		lights:set_light(e.test.id, 8)
 		test_summary:inc_failed()
