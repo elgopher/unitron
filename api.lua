@@ -34,9 +34,9 @@ local function equal(expected, actual, visited_values)
 	local function userdata_type(u)
 		-- dirty hack because I dont know the method to get userdata type
 		-- TODO OPTIMIZE IT
-		local p = pod(u)                 -- pod(u) returns userdata("u8",2,2,"02030405")
+		local p = pod(u)                   -- pod(u) returns userdata("u8",2,2,"02030405")
 		p = string.gsub(p, "userdata%(\"", "") -- drop userdata("
-		p = string.gsub(p, "\".*", "")   -- drop ").*
+		p = string.gsub(p, "\".*", "")     -- drop ").*
 		return p
 	end
 
@@ -77,7 +77,7 @@ local function get_caller()
 	local traceback = debug.traceback("", 3)
 	local loc = split(traceback, "\n")[3]
 	loc = string.gsub(loc, "(%d+):.*", "%1") -- drop message
-	loc = string.gsub(loc, "\t", "")      -- drop tabulator
+	loc = string.gsub(loc, "\t", "")       -- drop tabulator
 	return loc
 end
 
@@ -99,7 +99,7 @@ end
 
 local function serialize_message(msg)
 	if msg == nil then
-		return nil 
+		return nil
 	end
 
 	return tostring(msg)
@@ -109,8 +109,8 @@ end
 ---
 ---For strings, numbers and booleans '==' operator is used.
 ---
----For tables, all keys and values are compared deeply. 
----If you want to compare if two tables points to the same address in memory please use assert_same instead. 
+---For tables, all keys and values are compared deeply.
+---If you want to compare if two tables points to the same address in memory please use assert_same instead.
 ---Tables could have cycles.
 ---
 ---For userdata, all data is compared and userdata must be of the same type, width and height.
@@ -187,8 +187,8 @@ function assert_not_close(not_expected, actual, delta, msg)
 		local err = {
 			assert = "not_close",
 			not_expected = tostring(not_expected), -- TODO Picotron has a bug that small numbers are not properly serialized
-			actual = tostring(actual), -- TODO Picotron has a bug that small numbers are not properly serialized
-			delta = tostring(delta), -- TODO Picotron has a bug that small numbers are not properly serialized
+			actual = tostring(actual),       -- TODO Picotron has a bug that small numbers are not properly serialized
+			delta = tostring(delta),         -- TODO Picotron has a bug that small numbers are not properly serialized
 			msg = serialize_message(msg),
 			file = get_caller(),
 		}
