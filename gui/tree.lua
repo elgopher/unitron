@@ -11,6 +11,8 @@ function attach_tree(gui, el)
 
   local nodes_by_id = {}
 
+  local selected_child
+
   el.draw = function() end -- needed for scrollbars clipping
   local container = gui:attach(el)
   local root_node = container:attach({ width = el.width, height = node_height, x = 0, y = 0 })
@@ -33,7 +35,7 @@ function attach_tree(gui, el)
       child.indent = "" -- root element should not have an indent
     end
     function child:draw(msg)
-      if msg.mx > 0 and msg.mx < self.width and msg.my > 0 and msg.my < node_height then
+      if child == selected_child then
         pal(bg_color, highlight_bg_color); pal(fg_color, highlight_fg_color)
       end
       local prefix = "[-] "
@@ -46,6 +48,7 @@ function attach_tree(gui, el)
     end
 
     function child:click()
+      selected_child = child
       el:select { id = id }
       return true
     end
