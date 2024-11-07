@@ -84,5 +84,32 @@ function attach_tree(gui, el)
     root_node.height = 0
   end
 
+  local function child_y_relative_to_root_node(child)
+    local y = child.y
+    while child.parent != root_node do
+      y += child.parent.y
+      child = child.parent
+    end
+    return y
+  end
+
+  local function scroll_to_child(child)
+    local scroll_root_node = -child_y_relative_to_root_node(child) + (el.height / 2)
+    if scroll_root_node > 0 then
+      scroll_root_node = 0
+    end
+    local max_scroll = -root_node.height + el.height
+    if scroll_root_node <= max_scroll then
+      scroll_root_node = max_scroll
+    end
+
+    root_node.y = scroll_root_node
+  end
+
+  function container:select_child(id)
+    selected_child = nodes_by_id[id]
+    scroll_to_child(selected_child)
+  end
+
   return container
 end
