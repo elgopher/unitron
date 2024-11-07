@@ -244,7 +244,9 @@ function _init()
 
 		run_btn = toolbar:attach_button { x = 6, y = 4, width = 10 }
 		function run_btn:click()
-			start_test(item)
+			if runner_pid == nil then
+				start_test(item)
+			end
 		end
 
 		function run_btn:update()
