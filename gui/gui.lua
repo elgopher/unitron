@@ -216,6 +216,28 @@ function _init()
 
 		local text_area = attach_textarea(gui, { x = 0, y = 97, width = width, height = 103 })
 
+		local function find_lua_file_in_text(text)
+			return text:match("[^ ]*%.lua:%d+")
+		end
+
+		function text_area:is_link(text)
+			return text != nil and find_lua_file_in_text(text) != nil
+		end
+
+		function text_area:link_click(text)
+			if text == nil then return end
+
+			local file = find_lua_file_in_text(text)
+			if file != nil then
+				file = file:gsub(":", "#")
+				-- TODO if file is already open in text editor then this
+				-- command does not go to the specific line number.
+				-- Please note though, that in case of an unhandled error,
+				-- Picotron also opens the text editor in the same way.
+				create_process("/system/util/open.lua", { argv = { file } })
+			end
+		end
+
 		test_summary = attach_test_summary(gui, { x = 8, y = 102, width = 150, height = 10 })
 
 		local function select_test(test_id)
