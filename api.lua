@@ -32,12 +32,8 @@ local function equal(expected, actual, visited_values)
 	end
 
 	local function userdata_type(u)
-		-- dirty hack because I dont know the method to get userdata type
-		-- TODO OPTIMIZE IT
-		local p = pod(u)                   -- pod(u) returns userdata("u8",2,2,"02030405")
-		p = string.gsub(p, "userdata%(\"", "") -- drop userdata("
-		p = string.gsub(p, "\".*", "")     -- drop ").*
-		return p
+		_, _, t = u:attribs()
+		return t
 	end
 
 	if type(expected) != type(actual) then
