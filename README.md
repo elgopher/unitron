@@ -3,7 +3,7 @@ unitron
 
 Unit testing in Picotron.
 
-![Screenshot](label.png "unitron")
+![Screenshot](https://www.lexaloffle.com/media/81157/unitron-0.3.0.gif "unitron")
 
 How to use?
 ===========
