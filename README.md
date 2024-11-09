@@ -17,7 +17,7 @@ assert_eq("hello", "hello")
 ```
 
 * drag and drop the file to unitron window
-* see [examples](examples) folder for details how to write tests
+* **see [examples](examples) folder for details how to write tests**
 
 Why to write unit tests?
 ========================
