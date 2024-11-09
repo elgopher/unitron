@@ -10,7 +10,6 @@ include "gui/test_summary.lua"
 
 
 local run_btn, stop_btn, toggle_btn
-local test_tree
 local lights
 local test_summary
 
@@ -175,7 +174,6 @@ on_event("done", function(e)
 	end
 
 	runner_pid = nil
-	-- test_tree:select { id = e.root_test_id }
 end)
 
 function _init()
