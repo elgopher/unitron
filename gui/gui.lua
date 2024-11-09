@@ -39,6 +39,110 @@ local function stop_test()
 	end
 end
 
+-- item has filename and fullpath attributes
+local function start_test(item)
+	gui = create_gui()
+
+	cls(7)
+
+	local test_file = item.filename
+	local work_dir = item.fullpath:sub(1, #item.fullpath - #item.filename)
+
+	window { title = item.fullpath }
+
+	local text_area = attach_textarea(
+		gui,
+		{ x = 0, y = 97, width = width, height = 103 }
+	)
+
+	local function find_lua_file_in_text(text)
+		return text:match("[^ ]*%.lua:%d+")
+	end
+
+	function text_area:is_link(text)
+		return text != nil and find_lua_file_in_text(text) != nil
+	end
+
+	function text_area:link_click(text)
+		if text == nil then return end
+
+		local file = find_lua_file_in_text(text)
+		if file != nil then
+			file = file:gsub(":", "#")
+			-- TODO if file is already open in text editor then this
+			-- command does not go to the specific line number.
+			-- Please note though, that in case of an unhandled error,
+			-- Picotron also opens the text editor in the same way.
+			create_process("/system/util/open.lua", { argv = { file } })
+		end
+	end
+
+	test_summary = attach_test_summary(
+		gui,
+		{ x = 8, y = 102, width = 150, height = 10 }
+	)
+
+	local function select_test(test_id)
+		local lines = printed_lines:lines(test_id)
+		text_area:set_lines(lines)
+
+		lights:detach()
+		test_summary:detach()
+	end
+
+	lights = attach_lights(
+		gui,
+		{ x = 8, y = 115, width = 264, height = 78 }
+	)
+	function lights:select(selected_test)
+		select_test(selected_test)
+		test_tree:select_child(selected_test)
+	end
+
+	test_tree = attach_tree(
+		gui,
+		{ x = 0, y = 16, width = width, height = 80 }
+	)
+	function test_tree:select(e)
+		select_test(e.id)
+	end
+
+	attach_toolbar(
+		gui,
+		{
+			x = 0,
+			y = 0,
+			width = width,
+			height = 16,
+			start_test = function()
+				start_test(item)
+			end,
+			stop_test = stop_test,
+			is_running = function()
+				return runner_pid != nil
+			end
+		}
+	)
+
+	local function run_tests_in_seperate_process()
+		if runner_pid != nil then
+			return
+		end
+		printed_lines:reset()
+		test_tree:reset()
+		runner_pid = create_process(
+			"runner.lua",
+			{
+				argv = { test_file },
+				path = work_dir,
+				window_attribs = { autoclose = true }
+			}
+		)
+	end
+
+	run_tests_in_seperate_process()
+end
+
 on_event("test_started", function(e)
 	if e._from != runner_pid then
 		-- discard events from old runners
@@ -172,110 +276,6 @@ function _init()
 	--        )
 	-- 	end
 	-- }
-
-	-- item has filename and fullpath attributes
-	local function start_test(item)
-		gui = create_gui()
-
-		cls(7)
-
-		local test_file = item.filename
-		local work_dir = item.fullpath:sub(1, #item.fullpath - #item.filename)
-
-		window { title = item.fullpath }
-
-		local function run_tests_in_seperate_process()
-			if runner_pid != nil then
-				return
-			end
-			printed_lines:reset()
-			test_tree:reset()
-			runner_pid = create_process(
-				"runner.lua",
-				{
-					argv = { test_file },
-					path = work_dir,
-					window_attribs = { autoclose = true }
-				}
-			)
-		end
-
-		local text_area = attach_textarea(
-			gui,
-			{ x = 0, y = 97, width = width, height = 103 }
-		)
-
-		local function find_lua_file_in_text(text)
-			return text:match("[^ ]*%.lua:%d+")
-		end
-
-		function text_area:is_link(text)
-			return text != nil and find_lua_file_in_text(text) != nil
-		end
-
-		function text_area:link_click(text)
-			if text == nil then return end
-
-			local file = find_lua_file_in_text(text)
-			if file != nil then
-				file = file:gsub(":", "#")
-				-- TODO if file is already open in text editor then this
-				-- command does not go to the specific line number.
-				-- Please note though, that in case of an unhandled error,
-				-- Picotron also opens the text editor in the same way.
-				create_process("/system/util/open.lua", { argv = { file } })
-			end
-		end
-
-		test_summary = attach_test_summary(
-			gui,
-			{ x = 8, y = 102, width = 150, height = 10 }
-		)
-
-		local function select_test(test_id)
-			local lines = printed_lines:lines(test_id)
-			text_area:set_lines(lines)
-
-			lights:detach()
-			test_summary:detach()
-		end
-
-		lights = attach_lights(
-			gui,
-			{ x = 8, y = 115, width = 264, height = 78 }
-		)
-		function lights:select(selected_test)
-			select_test(selected_test)
-			test_tree:select_child(selected_test)
-		end
-
-		test_tree = attach_tree(
-			gui,
-			{ x = 0, y = 16, width = width, height = 80 }
-		)
-		function test_tree:select(e)
-			select_test(e.id)
-		end
-
-		attach_toolbar(
-			gui,
-			{
-				x = 0,
-				y = 0,
-				width = width,
-				height = 16,
-				start_test = function()
-					start_test(item)
-				end,
-				stop_test = stop_test,
-				is_running = function()
-					return runner_pid != nil
-				end
-			}
-		)
-
-		run_tests_in_seperate_process()
-	end
 
 	local run_from_the_browser = env().parent_pid == 1
 	if run_from_the_browser then
