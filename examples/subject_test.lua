@@ -3,6 +3,8 @@
 
 include "subject.lua" -- include the "production" code which will be tested here
 
+-- test function starts a test with given name. Code of the test is provided
+-- in the anonymous function function:
 test("compare strings", function()
 	local s = concat("hello ", "world")
 	-- change with assert_not_eq to get test error:
