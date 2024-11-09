@@ -7,9 +7,8 @@ include "gui/tree.lua"
 include "gui/textarea.lua"
 include "gui/lights.lua"
 include "gui/test_summary.lua"
+include "gui/test_toolbar.lua"
 
-
-local run_btn, stop_btn, toggle_btn
 local lights
 local test_summary
 
@@ -26,11 +25,6 @@ end
 
 local width = 280
 local height = 200
-
-local icon_color = 8
-local enabled_color = 0
-local disabled_color = 13
-local toolbar_color = 6
 
 local printed_lines = {
 	by_test_id = {}
@@ -284,65 +278,22 @@ function _init()
 			select_test(e.id)
 		end
 
-		local toolbar = gui:attach { x = 0, y = 0, width = width, height = 16 }
-		function toolbar:draw()
-			rectfill(0, 0, self.width, self.height, toolbar_color)
-		end
-
-		run_btn = toolbar:attach_button { x = 6, y = 4, width = 10 }
-		function run_btn:click()
-			if runner_pid == nil then
-				start_test(item)
-			end
-		end
-
-		function run_btn:update()
-			if runner_pid != nil then
-				self.cursor = nil
-			else
-				self.cursor = "pointer"
-			end
-		end
-
-		function run_btn:draw()
-			local col = disabled_color
-			if runner_pid == nil then
-				col = enabled_color
-			end
-			pal(icon_color, col)
-			spr(0)
-			pal()
-		end
-
-		stop_btn = toolbar:attach_button { x = 22, y = 4, width = 10 }
-		function stop_btn:click()
-			stop_test()
-		end
-
-		function stop_btn:update()
-			if runner_pid == nil then
-				self.cursor = nil
-			else
-				self.cursor = "pointer"
-			end
-		end
-
-		function stop_btn:draw()
-			local col = disabled_color
-			if runner_pid != nil then
-				col = enabled_color
-			end
-			pal(icon_color, col)
-			spr(1)
-			pal()
-		end
-
-		-- toggle_btn = toolbar:attach_button { x = 35, y = 4, width = 10 }
-		-- function toggle_btn:draw()
-		-- 	pal(icon_color, enabled_color)
-		-- 	spr(2)
-		-- 	pal()
-		-- end
+		attach_toolbar(
+			gui,
+			{
+				x = 0,
+				y = 0,
+				width = width,
+				height = 16,
+				start_test = function()
+					start_test(item)
+				end,
+				stop_test = stop_test,
+				is_running = function()
+					return runner_pid != nil
+				end
+			}
+		)
 
 		run_tests_in_seperate_process()
 	end

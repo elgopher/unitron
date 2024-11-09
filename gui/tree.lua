@@ -1,3 +1,4 @@
+--[[pod_format="raw",created="2024-11-09 17:24:35",modified="2024-11-09 17:24:35",revision=0]]
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
