@@ -1,6 +1,8 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
+-- this file contains code controlling GUI of test runner
+
 local gui, test_tree
 
 include "gui/tree.lua"
@@ -8,6 +10,7 @@ include "gui/textarea.lua"
 include "gui/lights.lua"
 include "gui/test_summary.lua"
 include "gui/test_toolbar.lua"
+include "gui/printed_lines.lua"
 
 local width <const> = 280
 local height <const> = 200
@@ -26,27 +29,7 @@ local function stop_test()
 	end
 end
 
-local printed_lines = {
-	by_test_id = {}
-}
-function printed_lines:print(test_id, text)
-	if self.by_test_id[test_id] == nil then
-		self.by_test_id[test_id] = {}
-	end
-	table.insert(self.by_test_id[test_id], text)
-end
-
-function printed_lines:lines(test_id)
-	if self.by_test_id[test_id] == nil then
-		return {}
-	end
-
-	return self.by_test_id[test_id]
-end
-
-function printed_lines:reset()
-	self.by_test_id = {}
-end
+local printed_lines = new_printed_lines()
 
 local function print_line(test, message)
 	printed_lines:print(test.id, message)
