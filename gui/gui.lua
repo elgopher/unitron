@@ -3,8 +3,6 @@
 
 -- this file contains code controlling GUI of test runner
 
-local gui, test_tree
-
 include "gui/tree.lua"
 include "gui/textarea.lua"
 include "gui/lights.lua"
@@ -15,19 +13,7 @@ include "gui/printed_lines.lua"
 local width <const> = 280
 local height <const> = 200
 
-local lights
-local test_summary
-
-local runner_pid
-local function stop_test()
-	if runner_pid != nil then
-		send_message(
-			2,
-			{ event = "kill_process", proc_id = runner_pid, exit_code = 1 }
-		)
-		runner_pid = nil
-	end
-end
+local gui, test_tree, lights, test_summary, runner_pid
 
 local printed_lines = new_printed_lines()
 
@@ -40,6 +26,16 @@ local function print_line(test, message)
 		printed_lines:print(parent.id, prefix .. message)
 		parent = parent.parent
 		prefix = prefix .. "  "
+	end
+end
+
+local function stop_test()
+	if runner_pid != nil then
+		send_message(
+			2,
+			{ event = "kill_process", proc_id = runner_pid, exit_code = 1 }
+		)
+		runner_pid = nil
 	end
 end
 
