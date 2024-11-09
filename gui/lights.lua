@@ -6,7 +6,7 @@
 function attach_lights(gui, el)
 	local lights = {}
 	local lights_max = 0
-	local size = 2 -- light size in pixels
+	local size <const> = 2 -- light size in pixels
 
 	local container = gui:attach(el)
 

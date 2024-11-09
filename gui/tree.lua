@@ -3,12 +3,12 @@
 -- This code is licensed under MIT license (see LICENSE for details)
 
 function attach_tree(gui, el)
-	local bg_color = 7
-	local fg_color = 13
-	local highlight_bg_color = 1
-	local highlight_fg_color = 7
+	local bg_color <const> = 7
+	local fg_color <const> = 13
+	local highlight_bg_color <const> = 1
+	local highlight_fg_color <const> = 7
 
-	local node_height = 10
+	local node_height <const> = 10
 
 	local nodes_by_id = {}
 

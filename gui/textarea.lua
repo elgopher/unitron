@@ -2,7 +2,7 @@
 -- This code is licensed under MIT license (see LICENSE for details)
 
 function attach_textarea(gui, el)
-	local line_height = 10
+	local line_height <const> = 10
 
 	el.draw = function() end -- draw is needed for clipping
 	local container = gui:attach(el)

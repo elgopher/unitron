@@ -9,6 +9,9 @@ include "gui/lights.lua"
 include "gui/test_summary.lua"
 include "gui/test_toolbar.lua"
 
+local width <const> = 280
+local height <const> = 200
+
 local lights
 local test_summary
 
@@ -22,9 +25,6 @@ local function stop_test()
 		runner_pid = nil
 	end
 end
-
-local width = 280
-local height = 200
 
 local printed_lines = {
 	by_test_id = {}
