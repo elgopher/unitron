@@ -165,7 +165,9 @@ on_event("test_finished", function(e)
 		return
 	end
 
-	if e.error == nil then
+	local err = e.error
+
+	if err == nil then
 		lights:set_light(e.test.id, 26)
 		test_summary:inc_succeeded()
 	else
@@ -176,14 +178,13 @@ on_event("test_finished", function(e)
 	local color
 	local message
 
-	if e.error == nil then
+	if err == nil then
 		message = "\fbTest successful"
 		color = "\fb"
 	else
-		if e.error.file != nil then
-			print_line(e.test, "\f8Error \f7at " .. e.error.file)
+		if err.file != nil then
+			print_line(e.test, "\f8Error \f7at " .. err.file)
 
-			local err = e.error
 			-- print additional message provided by user
 			if err.msg != nil then
 				print_line(e.test, err.msg)
