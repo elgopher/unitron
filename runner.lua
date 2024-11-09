@@ -1,6 +1,8 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
--- runner is a seperate application spawn by gui in a dedicated process. Therefore tests which are run does not block game loop.
+
+-- runner is a seperate application spawn by gui in a dedicated process.
+-- Therefore tests which are run does not block game loop.
 
 include "api.lua"
 
@@ -44,7 +46,10 @@ function test(name, test)
 	}
 	table.insert(tests, current_test)
 
-	send_message(parent_pid, { event = "test_started", test = current_test })
+	send_message(
+		parent_pid,
+		{ event = "test_started", test = current_test }
+	)
 
 	local success, err = pcall(test)
 	if not success then
@@ -82,7 +87,10 @@ local originalPrint = print
 -- override picotron print, so all text is sent to the parent process
 function print(text, x, y, color)
 	if x == nil and y == nil and color == nil then
-		send_message(parent_pid, { event = "print", test = tests[#tests], text = text })
+		send_message(
+			parent_pid,
+			{ event = "print", test = tests[#tests], text = text }
+		)
 	end
 
 	originalPrint(text, x, y, color)
@@ -93,7 +101,10 @@ cd(work_dir)
 test("root", function()
 	local ok = include(test_file)
 	if not ok then
-		send_message(parent_pid, { event = "fatal_error", error = test_file .. " not found" })
+		send_message(
+			parent_pid,
+			{ event = "fatal_error", error = test_file .. " not found" }
+		)
 		return
 	end
 end)

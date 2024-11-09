@@ -15,7 +15,9 @@ function attach_tree(gui, el)
 
 	el.draw = function() end -- needed for scrollbars clipping
 	local container = gui:attach(el)
-	local root_node = container:attach({ width = el.width, height = node_height, x = 0, y = 0 })
+	local root_node = container:attach(
+		{ width = el.width, height = node_height, x = 0, y = 0 }
+	)
 	root_node.indent = ""
 	container:attach_scrollbars { autohide = true }
 
@@ -28,7 +30,14 @@ function attach_tree(gui, el)
 		end
 
 
-		local child = parent:attach({ width = parent.width, height = node_height, x = 0, y = parent.height })
+		local child = parent:attach(
+			{
+				width = parent.width,
+				height = node_height,
+				x = 0,
+				y = parent.height
+			}
+		)
 		child.text = text
 		child.indent = parent.indent .. "  "
 		if parent_id == nil then
@@ -36,7 +45,8 @@ function attach_tree(gui, el)
 		end
 		function child:draw(msg)
 			if child == selected_child then
-				pal(bg_color, highlight_bg_color); pal(fg_color, highlight_fg_color)
+				pal(bg_color, highlight_bg_color);
+				pal(fg_color, highlight_fg_color)
 			end
 			local prefix = "[-] "
 			if #child.child == 0 then
@@ -62,7 +72,8 @@ function attach_tree(gui, el)
 
 		add_height(parent, node_height)
 
-		child._parent = parent -- use _parent beause parent is already used by Picotron
+		-- use _parent beause parent is already used by Picotron:
+		child._parent = parent
 		nodes_by_id[id] = child
 		child.cursor = "pointer"
 	end
@@ -94,7 +105,8 @@ function attach_tree(gui, el)
 	end
 
 	local function scroll_to_child(child)
-		local scroll_root_node = -child_y_relative_to_root_node(child) + (el.height / 2)
+		local scroll_root_node =
+			 -child_y_relative_to_root_node(child) + (el.height / 2)
 		if scroll_root_node > 0 then
 			scroll_root_node = 0
 		end

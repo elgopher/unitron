@@ -76,7 +76,9 @@ test("assert_eq", function()
 				left = { a = { b = "c" } },
 				right = { a = { b = "c" } },
 			},
-			tables_with_nil_value = { -- in Lua there is no distinction whether key is nil or not present in a table
+			-- in Lua there is no distinction whether key is nil
+			-- or not present in a table:
+			tables_with_nil_value = {
 				left = { key = nil },
 				right = { another_key = nil },
 			},

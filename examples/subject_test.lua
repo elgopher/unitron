@@ -41,12 +41,13 @@ test("assert nil", function()
 	assert_nil(v)
 end)
 
--- sometimes you want to be sure that two tables are pointing to the same address
--- in memory
+-- sometimes you want to be sure that two tables are pointing to the same
+-- address in memory
 test("compare pointers", function()
 	local t = { key = "value" }
 	local pointer_to_t = t
-	assert_same(t, pointer_to_t) -- internally assert_same just runs expected==actual
+	-- internally assert_same just runs expected==actual:
+	assert_same(t, pointer_to_t)
 end)
 
 -- standard assert function can be used too to veryify if argument is true
@@ -66,13 +67,13 @@ test("nesting tests", function()
 	end)
 end)
 
--- table driven tests are the kind of nested tests which use tests defined in tables.
--- This greatly reduces amount of code.
+-- table driven tests are the kind of nested tests which use tests defined
+-- in tables. This greatly reduces amount of code.
 test("table driven tests", function()
 	local tests = {
 		-- first test case with name "2+2=4".
-		-- You can drop square brackets and quotes when key does not have special
-		-- characters.
+		-- You can drop square brackets and quotes when key does not have
+		-- special characters.
 		["2+2=4"] = { left = 2, right = 2, expected_sum = 4 },
 		["0+1=1"] = { left = 0, right = 1, expected_sum = 1 } -- second test case
 	}

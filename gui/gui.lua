@@ -17,7 +17,10 @@ local test_summary
 local runner_pid
 local function stop_test()
 	if runner_pid != nil then
-		send_message(2, { event = "kill_process", proc_id = runner_pid, exit_code = 1 })
+		send_message(
+			2,
+			{ event = "kill_process", proc_id = runner_pid, exit_code = 1 }
+		)
 		runner_pid = nil
 	end
 end
@@ -189,7 +192,13 @@ function _init()
 	-- 	label = "\^:7f4141417f616500 Open File",
 	-- 	shortcut = "CTRL-O", -- ctrl-s is handled by window manager
 	-- 	action = function()
-	-- 		create_process("/system/apps/filenav.p64", {intention="save_file_as", window_attribs={workspace = "current", autoclose=true}})
+	-- 		create_process(
+	--         "/system/apps/filenav.p64",
+	--         {
+	--              intention="save_file_as",
+	--              window_attribs={workspace = "current", autoclose=true}
+	--         }
+	--        )
 	-- 	end
 	-- }
 
@@ -210,11 +219,20 @@ function _init()
 			end
 			printed_lines:reset()
 			test_tree:reset()
-			runner_pid = create_process("runner.lua",
-				{ argv = { test_file }, path = work_dir, window_attribs = { autoclose = true } })
+			runner_pid = create_process(
+				"runner.lua",
+				{
+					argv = { test_file },
+					path = work_dir,
+					window_attribs = { autoclose = true }
+				}
+			)
 		end
 
-		local text_area = attach_textarea(gui, { x = 0, y = 97, width = width, height = 103 })
+		local text_area = attach_textarea(
+			gui,
+			{ x = 0, y = 97, width = width, height = 103 }
+		)
 
 		local function find_lua_file_in_text(text)
 			return text:match("[^ ]*%.lua:%d+")
@@ -238,7 +256,10 @@ function _init()
 			end
 		end
 
-		test_summary = attach_test_summary(gui, { x = 8, y = 102, width = 150, height = 10 })
+		test_summary = attach_test_summary(
+			gui,
+			{ x = 8, y = 102, width = 150, height = 10 }
+		)
 
 		local function select_test(test_id)
 			local lines = printed_lines:lines(test_id)
@@ -248,13 +269,19 @@ function _init()
 			test_summary:detach()
 		end
 
-		lights = attach_lights(gui, { x = 8, y = 115, width = 264, height = 78 })
+		lights = attach_lights(
+			gui,
+			{ x = 8, y = 115, width = 264, height = 78 }
+		)
 		function lights:select(selected_test)
 			select_test(selected_test)
 			test_tree:select_child(selected_test)
 		end
 
-		test_tree = attach_tree(gui, { x = 0, y = 16, width = width, height = 80 })
+		test_tree = attach_tree(
+			gui,
+			{ x = 0, y = 16, width = width, height = 80 }
+		)
 		function test_tree:select(e)
 			select_test(e.id)
 		end

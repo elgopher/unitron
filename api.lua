@@ -1,7 +1,8 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
--- table_len returns number of elements in a table t. Keys with nil value are not counted
+-- table_len returns number of elements in a table t.
+-- Keys with nil value are not counted
 local function table_len(t)
 	local count = 0
 	for _ in pairs(t) do count = count + 1 end
@@ -13,7 +14,8 @@ local function equal(expected, actual, visited_values)
 		visited_values = {}
 		visited_values[expected] = true
 	elseif visited_values[expected] == true then
-		-- do not compare already visited values (avoid stack overflow for cycle references)
+		-- do not compare already visited values
+		-- (avoid stack overflow for cycle references)
 		return true
 	end
 
@@ -106,10 +108,12 @@ end
 ---For strings, numbers and booleans '==' operator is used.
 ---
 ---For tables, all keys and values are compared deeply.
----If you want to compare if two tables points to the same address in memory please use assert_same instead.
+---If you want to compare if two tables points to the same address in memory
+---please use assert_same instead.
 ---Tables could have cycles.
 ---
----For userdata, all data is compared and userdata must be of the same type, width and height.
+---For userdata, all data is compared and userdata must be of the same type,
+---width and height.
 ---
 ---@param expected any
 ---@param actual any
@@ -143,7 +147,9 @@ function assert_same(expected, actual, msg)
 	if expected != actual then
 		local err = {
 			assert = "same",
-			expected = tostring(expected), -- tostring() is more useful than serialize because pointers have more value than values here
+			-- tostring() is more useful than serialize because pointers have
+			-- more value than values here:
+			expected = tostring(expected),
 			actual = tostring(actual),
 			msg = serialize_message(msg),
 			file = get_caller(),

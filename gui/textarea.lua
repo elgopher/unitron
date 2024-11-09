@@ -6,7 +6,9 @@ function attach_textarea(gui, el)
 
 	el.draw = function() end -- draw is needed for clipping
 	local container = gui:attach(el)
-	local text_area = container:attach({ x = 0, y = 0, width = el.width, height = 0 })
+	local text_area = container:attach(
+		{ x = 0, y = 0, width = el.width, height = 0 }
+	)
 	container:attach_scrollbars { autohide = true }
 
 	local lines = {}
