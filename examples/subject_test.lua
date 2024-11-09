@@ -84,7 +84,7 @@ test("table driven tests", function()
 		-- start nested test with test case name so when there is an error
 		-- you will know which specific test case failed:
 		test(test_name, function()
-			local sum = add(test_case.left, test_case.right)
+			local sum = add_numbers(test_case.left, test_case.right)
 			assert_eq(test_case.expected_sum, sum)
 		end)
 	end

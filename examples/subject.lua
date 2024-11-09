@@ -20,7 +20,7 @@ end
 ---@param left number
 ---@param right number
 ---@return number
-function add(left, right)
+function add_numbers(left, right)
 	return left + right
 end
 
