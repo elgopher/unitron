@@ -143,6 +143,7 @@ local function start_test(item)
 	run_tests_in_seperate_process()
 end
 
+-- test_started event is published by the runner process for each started test
 on_event("test_started", function(e)
 	if e._from != runner_pid then
 		-- discard events from old runners
@@ -159,6 +160,7 @@ on_event("test_started", function(e)
 	sfx(1)
 end)
 
+-- test_finished event is published by the runner process for each started test
 on_event("test_finished", function(e)
 	if e._from != runner_pid then
 		-- discard events from old runners
@@ -236,6 +238,8 @@ on_event("test_finished", function(e)
 	-- update text for all parents
 end)
 
+-- print event is published by the runner process for each print command
+-- executed by test
 on_event("print", function(e)
 	if e._from != runner_pid then
 		-- discard events from old runners
@@ -245,6 +249,7 @@ on_event("print", function(e)
 	printed_lines:print(e.test.id, e.text)
 end)
 
+-- done event is published by the runner process when all test have finished
 on_event("done", function(e)
 	if e._from != runner_pid then
 		-- discard events from old runners
