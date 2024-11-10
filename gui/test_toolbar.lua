@@ -1,7 +1,7 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
-function attach_toolbar(gui, el)
+function attach_toolbar(parent, el)
    local toolbar_color <const> = 6
    local disabled_color <const> = 13
    local enabled_color <const> = 0
@@ -9,7 +9,7 @@ function attach_toolbar(gui, el)
 
    local run_btn, stop_btn, toggle_btn
 
-   el = gui:attach(el)
+   el = parent:attach(el)
    function el:draw()
       rectfill(0, 0, self.width, self.height, toolbar_color)
    end

@@ -1,10 +1,10 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
-function attach_textarea(gui, el)
+function attach_textarea(parent, el)
 	local line_height <const> = 10
 
-	el = gui:attach(el)
+	el = parent:attach(el)
 	local text_area = el:attach(
 		{ x = 0, y = 0, width = el.width, height = 0 }
 	)

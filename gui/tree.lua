@@ -2,7 +2,7 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
-function attach_tree(gui, el)
+function attach_tree(parent_el, el)
 	local bg_color <const> = 7
 	local fg_color <const> = 13
 	local highlight_bg_color <const> = 1
@@ -14,7 +14,8 @@ function attach_tree(gui, el)
 
 	local selected_child
 
-	el = gui:attach(el)
+	el = parent_el:attach(el)
+
 	local root_node = el:attach(
 		{ width = el.width, height = node_height, x = 0, y = 0 }
 	)
