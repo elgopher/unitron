@@ -7,8 +7,7 @@ include "subject.lua" -- include the "production" code which will be tested here
 -- in the anonymous function:
 test("compare strings", function()
 	local s = concat("hello ", "world")
-	-- change with assert_not_eq to get test error:
-	assert_eq("hello world", s)
+	assert_eq("hello world", s) -- change total assert_not_eq to get test error
 	-- assertions can have optional message which is presented in the unitron's
 	-- user interface:
 	assert_eq("hello world", s, "should return \"hello world\"")
