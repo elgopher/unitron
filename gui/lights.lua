@@ -3,12 +3,12 @@
 
 -- lights is a gui component showing lights of different color :)
 
-function attach_lights(gui, el)
+function attach_lights(parent, el)
 	local lights = {}
 	local lights_max = 0
 	local size <const> = 2 -- light size in pixels
 
-	el = gui:attach(el)
+	el = parent:attach(el)
 
 	function el:set_light(no, color)
 		lights[no] = color
