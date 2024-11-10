@@ -14,15 +14,14 @@ function attach_tree(gui, el)
 
 	local selected_child
 
-	el.draw = function() end -- needed for scrollbars clipping
-	local container = gui:attach(el)
-	local root_node = container:attach(
+	el = gui:attach(el)
+	local root_node = el:attach(
 		{ width = el.width, height = node_height, x = 0, y = 0 }
 	)
 	root_node.indent = ""
-	container:attach_scrollbars { autohide = true }
+	el:attach_scrollbars { autohide = true }
 
-	function container:add_child(id, text, parent_id)
+	function el:add_child(id, text, parent_id)
 		local parent
 		if parent_id == nil then
 			parent = root_node
@@ -79,15 +78,15 @@ function attach_tree(gui, el)
 		child.cursor = "pointer"
 	end
 
-	function container:draw()
-		rectfill(0, 0, container.width, container.height, bg_color)
+	function el:draw()
+		rectfill(0, 0, el.width, el.height, bg_color)
 	end
 
-	function container:update_child_text(id, text)
+	function el:update_child_text(id, text)
 		nodes_by_id[id].text = text
 	end
 
-	function container:reset()
+	function el:reset()
 		for _, child in ipairs(root_node.child) do
 			child:detach()
 		end
@@ -119,10 +118,10 @@ function attach_tree(gui, el)
 		root_node.y = scroll_root_node
 	end
 
-	function container:select_child(id)
+	function el:select_child(id)
 		selected_child = nodes_by_id[id]
 		scroll_to_child(selected_child)
 	end
 
-	return container
+	return el
 end

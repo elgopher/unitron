@@ -9,12 +9,12 @@ function attach_toolbar(gui, el)
 
    local run_btn, stop_btn, toggle_btn
 
-   local toolbar = gui:attach(el)
-   function toolbar:draw()
+   el = gui:attach(el)
+   function el:draw()
       rectfill(0, 0, self.width, self.height, toolbar_color)
    end
 
-   run_btn = toolbar:attach_button { x = 6, y = 4, width = 10 }
+   run_btn = el:attach_button { x = 6, y = 4, width = 10 }
    function run_btn:click()
       if not el:is_running() then
          el:start_test()
@@ -39,7 +39,7 @@ function attach_toolbar(gui, el)
       pal()
    end
 
-   stop_btn = toolbar:attach_button { x = 22, y = 4, width = 10 }
+   stop_btn = el:attach_button { x = 22, y = 4, width = 10 }
    function stop_btn:click()
       el:stop_test()
    end
@@ -68,4 +68,6 @@ function attach_toolbar(gui, el)
    -- 	spr(2)
    -- 	pal()
    -- end
+
+   return el
 end

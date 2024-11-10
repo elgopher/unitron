@@ -4,12 +4,11 @@
 function attach_textarea(gui, el)
 	local line_height <const> = 10
 
-	el.draw = function() end -- draw is needed for clipping
-	local container = gui:attach(el)
-	local text_area = container:attach(
+	el = gui:attach(el)
+	local text_area = el:attach(
 		{ x = 0, y = 0, width = el.width, height = 0 }
 	)
-	container:attach_scrollbars { autohide = true }
+	el:attach_scrollbars { autohide = true }
 
 	local lines = {}
 
@@ -50,11 +49,11 @@ function attach_textarea(gui, el)
 		self.y += e.wheel_y * 32
 	end
 
-	function container:set_lines(lines_to_draw)
+	function el:set_lines(lines_to_draw)
 		text_area.y = 0
 		lines = lines_to_draw
 		text_area.height = line_height * #lines
 	end
 
-	return container
+	return el
 end

@@ -8,9 +8,9 @@ function attach_lights(gui, el)
 	local lights_max = 0
 	local size <const> = 2 -- light size in pixels
 
-	local container = gui:attach(el)
+	el = gui:attach(el)
 
-	function container:set_light(no, color)
+	function el:set_light(no, color)
 		lights[no] = color
 		lights_max = max(lights_max, no)
 	end
@@ -29,22 +29,22 @@ function attach_lights(gui, el)
 		return nil
 	end
 
-	function container:update(msg)
+	function el:update(msg)
 		if light_at_cursor_pointer(msg) != nil then
-			container.cursor = "pointer"
+			el.cursor = "pointer"
 		else
-			container.cursor = ""
+			el.cursor = ""
 		end
 	end
 
-	function container:click(msg)
+	function el:click(msg)
 		local light = light_at_cursor_pointer(msg)
 		if light != nil then
 			el:select(light)
 		end
 	end
 
-	function container:draw()
+	function el:draw()
 		rectfill(0, 0, el.width, el.height, 0)
 		local x, y = 0, 0
 
@@ -68,5 +68,5 @@ function attach_lights(gui, el)
 		end
 	end
 
-	return container
+	return el
 end
