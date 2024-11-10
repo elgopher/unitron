@@ -1,6 +1,7 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
+---@param el {x:number,y:number,width:number,height:number}
 function attach_test_summary(parent, el)
 	local succeeded, failed = 0, 0
 
