@@ -2,6 +2,7 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
+---@param el {x:number,y:number,width:number,height:number,select:function}
 function attach_tree(parent_el, el)
 	local bg_color <const> = 7
 	local fg_color <const> = 13

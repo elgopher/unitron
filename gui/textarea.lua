@@ -1,6 +1,7 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
+---@param el {x:number,y:number,width:number,height:number,is_link:function,link_click:function}
 function attach_textarea(parent, el)
 	local line_height <const> = 10
 
@@ -17,7 +18,7 @@ function attach_textarea(parent, el)
 	end
 
 	local function is_link(text)
-		return el.is_link != nil and el:is_link(text)
+		return el.is_link != nil and el.is_link(text)
 	end
 
 	function text_area:update(msg)
@@ -33,7 +34,7 @@ function attach_textarea(parent, el)
 	function text_area:click(msg)
 		local text = text_at_mouse_position(msg)
 		if is_link(text) and el.link_click != nil then
-			el:link_click(text)
+			el.link_click(text)
 		end
 	end
 

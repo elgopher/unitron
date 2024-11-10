@@ -3,6 +3,7 @@
 
 -- lights is a gui component showing lights of different color :)
 
+---@param el {x:number,y:number,width:number,height:number,select:function}
 function attach_lights(parent, el)
 	local lights <const> = {}
 	local lights_max = 0
@@ -40,7 +41,7 @@ function attach_lights(parent, el)
 	function el:click(msg)
 		local light = light_at_cursor_pointer(msg)
 		if light != nil then
-			el:select(light)
+			el.select(light)
 		end
 	end
 
