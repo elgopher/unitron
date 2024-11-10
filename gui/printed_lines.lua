@@ -5,7 +5,7 @@
 function new_printed_lines()
    local by_test_id = {}
 
-   local printed_lines = {}
+   local printed_lines <const> = {}
 
    function printed_lines:print(test_id, text)
       if by_test_id[test_id] == nil then

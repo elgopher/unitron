@@ -10,7 +10,7 @@ function attach_tree(parent_el, el)
 
 	local node_height <const> = 10
 
-	local nodes_by_id = {}
+	local nodes_by_id <const> = {}
 
 	local selected_child
 
