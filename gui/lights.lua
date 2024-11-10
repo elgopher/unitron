@@ -4,7 +4,7 @@
 -- lights is a gui component showing lights of different color :)
 
 function attach_lights(parent, el)
-	local lights = {}
+	local lights <const> = {}
 	local lights_max = 0
 	local size <const> = 2 -- light size in pixels
 

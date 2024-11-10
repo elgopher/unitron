@@ -15,7 +15,7 @@ local height <const> = 200
 
 local gui, test_tree, lights, test_summary, runner_pid
 
-local printed_lines = new_printed_lines()
+local printed_lines <const> = new_printed_lines()
 
 local function print_line(test, message)
 	printed_lines:print(test.id, message)

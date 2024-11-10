@@ -5,7 +5,7 @@ function attach_textarea(parent, el)
 	local line_height <const> = 10
 
 	el = parent:attach(el)
-	local text_area = el:attach(
+	local text_area <const> = el:attach(
 		{ x = 0, y = 0, width = el.width, height = 0 }
 	)
 	el:attach_scrollbars { autohide = true }

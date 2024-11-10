@@ -7,14 +7,12 @@ function attach_toolbar(parent, el)
    local enabled_color <const> = 0
    local icon_color <const> = 8
 
-   local run_btn, stop_btn, toggle_btn
-
    el = parent:attach(el)
    function el:draw()
       rectfill(0, 0, self.width, self.height, toolbar_color)
    end
 
-   run_btn = el:attach_button { x = 6, y = 4, width = 10 }
+   local run_btn <const> = el:attach_button { x = 6, y = 4, width = 10 }
    function run_btn:click()
       if not el:is_running() then
          el:start_test()
@@ -39,7 +37,7 @@ function attach_toolbar(parent, el)
       pal()
    end
 
-   stop_btn = el:attach_button { x = 22, y = 4, width = 10 }
+   local stop_btn <const> = el:attach_button { x = 22, y = 4, width = 10 }
    function stop_btn:click()
       el:stop_test()
    end
@@ -62,7 +60,7 @@ function attach_toolbar(parent, el)
       pal()
    end
 
-   -- toggle_btn = toolbar:attach_button { x = 35, y = 4, width = 10 }
+   -- local toggle_btn <const> = toolbar:attach_button { x = 35, y = 4, width = 10 }
    -- function toggle_btn:draw()
    -- 	pal(icon_color, enabled_color)
    -- 	spr(2)
