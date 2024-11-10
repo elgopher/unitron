@@ -131,6 +131,9 @@ function assert_eq(expected, actual, msg)
 	end
 end
 
+---@param not_expected any
+---@param actual any
+---@param msg? any message which will be presented in the unitron ui.
 function assert_not_eq(not_expected, actual, msg)
 	if equal(not_expected, actual) then
 		local err = {
@@ -143,6 +146,9 @@ function assert_not_eq(not_expected, actual, msg)
 	end
 end
 
+---@param expected any
+---@param actual any
+---@param msg? any message which will be presented in the unitron ui.
 function assert_same(expected, actual, msg)
 	if expected != actual then
 		local err = {
@@ -158,6 +164,9 @@ function assert_same(expected, actual, msg)
 	end
 end
 
+---@param not_expected any
+---@param actual any
+---@param msg? any message which will be presented in the unitron ui.
 function assert_not_same(not_expected, actual, msg)
 	if not_expected == actual then
 		local err = {
@@ -170,6 +179,10 @@ function assert_not_same(not_expected, actual, msg)
 	end
 end
 
+---@param expected number
+---@param actual number
+---@param delta number
+---@param msg? any message which will be presented in the unitron ui.
 function assert_close(expected, actual, delta, msg)
 	if abs(expected - actual) > delta then
 		local err = {
@@ -184,6 +197,10 @@ function assert_close(expected, actual, delta, msg)
 	end
 end
 
+---@param not_expected number
+---@param actual number
+---@param delta number
+---@param msg? any message which will be presented in the unitron ui.
 function assert_not_close(not_expected, actual, delta, msg)
 	if abs(not_expected - actual) <= delta then
 		local err = {
@@ -198,6 +215,8 @@ function assert_not_close(not_expected, actual, delta, msg)
 	end
 end
 
+---@param actual any
+---@param msg? any message which will be presented in the unitron ui.
 function assert_not_nil(actual, msg)
 	if actual == nil then
 		local err = {
@@ -209,6 +228,8 @@ function assert_not_nil(actual, msg)
 	end
 end
 
+---@param actual any
+---@param msg? any message which will be presented in the unitron ui.
 function assert_nil(actual, msg)
 	if actual != nil then
 		local err = {
