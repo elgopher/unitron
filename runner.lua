@@ -1,8 +1,12 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
--- runner is a seperate application spawn by gui in a dedicated process.
--- Therefore tests which are run does not block game loop.
+-- runner is a seperate application spawn by gui/cli in a dedicated process.
+-- runner runs user tests. Once done, runner exits.
+-- runner is needed because running tests from inside GUI will block the game
+-- loop or will have a potential side effects (like drawing in the window)
+
+-- runner send messages with events to communicate with the parent process.
 
 include "api.lua"
 
