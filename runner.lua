@@ -26,6 +26,10 @@ local id_sequence = 0
 
 local tests <const> = {} -- {id=1,name=..}
 
+local function publish(msg)
+	send_message(parent_pid, msg)
+end
+
 local function set_error_on_parents(parent, err)
 	while parent != nil do
 		parent.error = err
@@ -50,10 +54,7 @@ function test(name, test)
 	}
 	table.insert(tests, current_test)
 
-	send_message(
-		parent_pid,
-		{ event = "test_started", test = current_test }
-	)
+	publish { event = "test_started", test = current_test }
 
 	local success, err = pcall(test)
 	if not success then
@@ -82,8 +83,7 @@ function test(name, test)
 
 	table.remove(tests, #tests)
 
-	send_message(parent_pid,
-		{ event = "test_finished", test = current_test, error = err })
+	publish { event = "test_finished", test = current_test, error = err }
 end
 
 local originalPrint <const> = print
@@ -91,10 +91,7 @@ local originalPrint <const> = print
 -- override picotron print, so all text is sent to the parent process
 function print(text, x, y, color)
 	if x == nil and y == nil and color == nil then
-		send_message(
-			parent_pid,
-			{ event = "print", test = tests[#tests], text = text }
-		)
+		publish { event = "print", test = tests[#tests], text = text }
 	end
 
 	originalPrint(text, x, y, color)
@@ -105,12 +102,9 @@ cd(work_dir)
 test("root", function()
 	local ok = include(test_file)
 	if not ok then
-		send_message(
-			parent_pid,
-			{ event = "fatal_error", error = test_file .. " not found" }
-		)
+		publish { event = "fatal_error", error = test_file .. " not found" }
 		return
 	end
 end)
 
-send_message(parent_pid, { event = "done", root_test_id = 1 })
+publish { event = "done", root_test_id = 1 }
