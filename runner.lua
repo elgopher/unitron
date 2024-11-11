@@ -10,11 +10,11 @@
 
 include "api.lua"
 
-local work_dir = env().path
+local work_dir            = env().path
 
-local parent_pid = env().parent_pid
-local test_file = env().argv[1]
-local dir_in_file = string.match(test_file, ".+/")
+local parent_pid <const>  = env().parent_pid
+local test_file <const>   = env().argv[1]
+local dir_in_file <const> = string.match(test_file, ".+/")
 if dir_in_file then
 	work_dir = dir_in_file
 end
@@ -24,7 +24,7 @@ end
 
 local id_sequence = 0
 
-local tests = {} -- {id=1,name=..}
+local tests <const> = {} -- {id=1,name=..}
 
 local function set_error_on_parents(parent, err)
 	while parent != nil do
@@ -86,7 +86,7 @@ function test(name, test)
 		{ event = "test_finished", test = current_test, error = err })
 end
 
-local originalPrint = print
+local originalPrint <const> = print
 
 -- override picotron print, so all text is sent to the parent process
 function print(text, x, y, color)
