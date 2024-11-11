@@ -4,6 +4,8 @@
 -- this file contains code controlling GUI of test runner
 
 include "gui/tree.lua"
+include "gui/new_tree.lua"
+include "gui/lazy_tree.lua"
 include "gui/text_output.lua"
 include "gui/lights.lua"
 include "gui/test_summary.lua"
@@ -115,18 +117,17 @@ local function start_test(item)
 			height = 79,
 			select = function(selected_test)
 				select_test(selected_test)
-				test_tree:select_child(selected_test)
+				test_tree:select_node(selected_test)
 			end
 		}
 	)
 
-	test_tree = attach_tree(
+	test_tree = attach_lazy_tree(
 		gui,
-		{ x = 0, y = 16, width = width, height = 80 }
+		{
+			x = 0, y = 16, width = width, height = 80, select = select_test
+		}
 	)
-	function test_tree:select(e)
-		select_test(e.id)
-	end
 
 	attach_toolbar(
 		gui,
@@ -173,7 +174,7 @@ on_event("test_started", function(e)
 
 	local parent_id
 	if e.test.parent != nil then parent_id = e.test.parent.id end
-	test_tree:add_child(e.test.id, e.test.name .. " (running)", parent_id)
+	test_tree:add_node(e.test.id, e.test.name .. " (running)", parent_id)
 
 	print_line(e.test, "\f5Running \f7" .. e.test.name)
 	sfx(1)
@@ -253,7 +254,7 @@ on_event("test_finished", function(e)
 	print_line(e.test, message)
 	print_line(e.test, "")
 
-	test_tree:update_child_text(e.test.id, color .. e.test.name)
+	test_tree:update_node_text(e.test.id, color .. e.test.name)
 	-- update text for all parents
 end)
 

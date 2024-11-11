@@ -2,6 +2,9 @@
 -- This code is licensed under MIT license (see LICENSE for details)
 
 -- new_printed_lines returns object which holds lines printed for given test
+-- TODO Extend it and store more information - not only string, but also
+-- whether test was successful. Do not store strings like "Test successful",
+-- because it consumes memory. Do not initialize tables with 0 lines.
 function new_printed_lines()
    local by_test_id = {}
 

@@ -2,6 +2,10 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
+---attaches a tree to the parent_el.
+---Tree is a GUI component that renders a tree of nodes_by_line_array.
+---Each node must have an unique id of any type and a text. Node without
+---a parent is a root node.
 ---@param el {x:number,y:number,width:number,height:number,select:function}
 function attach_tree(parent_el, el)
 	local bg_color <const> = 7
@@ -13,7 +17,7 @@ function attach_tree(parent_el, el)
 
 	local nodes_by_id <const> = {}
 
-	local selected_child
+	local selected_node
 
 	el = parent_el:attach(el)
 
@@ -23,7 +27,7 @@ function attach_tree(parent_el, el)
 	root_node.indent = ""
 	el:attach_scrollbars { autohide = true }
 
-	function el:add_child(id, text, parent_id)
+	function el:add_node(id, text, parent_id)
 		local parent
 		if parent_id == nil then
 			parent = root_node
@@ -46,7 +50,7 @@ function attach_tree(parent_el, el)
 			child.indent = "" -- root element should not have an indent
 		end
 		function child:draw(msg)
-			if child == selected_child then
+			if child == selected_node then
 				pal(bg_color, highlight_bg_color);
 				pal(fg_color, highlight_fg_color)
 			end
@@ -59,8 +63,12 @@ function attach_tree(parent_el, el)
 			pal()
 		end
 
-		function child:click()
-			selected_child = child
+		function child:click(msg)
+			if msg.mx < #child.indent * 5 + 15 then
+				child.height = node_height
+				return
+			end
+			selected_node = child
 			el:select { id = id }
 			return true
 		end
@@ -84,7 +92,7 @@ function attach_tree(parent_el, el)
 		rectfill(0, 0, el.width, el.height, bg_color)
 	end
 
-	function el:update_child_text(id, text)
+	function el:update_node_text(id, text)
 		nodes_by_id[id].text = text
 	end
 
@@ -97,7 +105,7 @@ function attach_tree(parent_el, el)
 		return y
 	end
 
-	local function scroll_to_child(child)
+	local function scroll_to_node(child)
 		local scroll_root_node =
 			 -child_y_relative_to_root_node(child) + (el.height / 2)
 		if scroll_root_node > 0 then
@@ -111,9 +119,9 @@ function attach_tree(parent_el, el)
 		root_node.y = scroll_root_node
 	end
 
-	function el:select_child(id)
-		selected_child = nodes_by_id[id]
-		scroll_to_child(selected_child)
+	function el:select_node(id)
+		selected_node = nodes_by_id[id]
+		scroll_to_node(selected_node)
 	end
 
 	return el
