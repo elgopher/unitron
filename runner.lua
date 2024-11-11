@@ -9,6 +9,7 @@
 -- runner send messages with events to communicate with the parent process.
 
 include "api.lua"
+include "throttler.lua"
 
 local work_dir            = env().path
 
@@ -24,9 +25,12 @@ end
 
 local id_sequence = 0
 
-local tests <const> = {} -- {id=1,name=..}
+local tests <const> = {}                            -- {id=1,name=..}
+
+local publish_throttler <const> = new_throttler(50) -- max 50 messages per frame
 
 local function publish(msg)
+	publish_throttler:throttle()
 	send_message(parent_pid, msg)
 end
 
