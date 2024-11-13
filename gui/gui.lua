@@ -13,7 +13,7 @@ include "gui/printed_lines.lua"
 local width <const> = 280
 local height <const> = 200
 
-local gui, test_tree, lights, test_summary, runner_pid
+local gui, test_tree, lights, test_summary, runner_pid, selected_test_id
 
 local printed_lines <const> = new_printed_lines()
 
@@ -54,18 +54,26 @@ local function start_test(item)
 		return text:match("[^ ]*%.lua:%d+")
 	end
 
-	local text_area = attach_textarea(
+	local textarea = attach_textarea(
 		gui,
 		{
 			x = 0,
 			y = 97,
 			width = width,
 			height = 103,
-			is_link = function(text)
-				return text != nil and find_lua_file_in_text(text) != nil
+			lines_len = function()
+				if selected_test_id == nil then return 0 end
+				return printed_lines:lines_len(selected_test_id)
 			end,
-			link_click = function(text)
-				if text == nil then return end
+			get_line = function(line_no)
+				return printed_lines:line(selected_test_id, line_no)
+			end,
+			is_link = function(line_no)
+				local text = printed_lines:line(selected_test_id, line_no)
+				return find_lua_file_in_text(text) != nil
+			end,
+			link_click = function(line_no)
+				local text = printed_lines:line(selected_test_id, line_no)
 
 				local file = find_lua_file_in_text(text)
 				if file != nil then
@@ -86,8 +94,9 @@ local function start_test(item)
 	)
 
 	local function select_test(test_id)
-		local lines = printed_lines:lines(test_id)
-		text_area:set_lines(lines)
+		selected_test_id = test_id
+
+		textarea:scroll_to_the_top()
 
 		lights:detach()
 		test_summary:detach()

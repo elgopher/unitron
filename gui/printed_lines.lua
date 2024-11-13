@@ -14,12 +14,20 @@ function new_printed_lines()
       table.insert(by_test_id[test_id], text)
    end
 
-   function printed_lines:lines(test_id)
+   function printed_lines:line(test_id, line_no)
       if by_test_id[test_id] == nil then
-         return {}
+         return ""
       end
 
-      return by_test_id[test_id]
+      return by_test_id[test_id][line_no] or ""
+   end
+
+   function printed_lines:lines_len(test_id, line_no)
+      if by_test_id[test_id] == nil then
+         return 0
+      end
+
+      return #by_test_id[test_id] or 0
    end
 
    function printed_lines:reset()
