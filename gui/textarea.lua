@@ -1,9 +1,11 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
----@param el {x:number,y:number,width:number,height:number,is_link:function,link_click:function}
+---@param el {x:number, y:number, width:number, height:number, is_link:function, link_click:function, get_line:function, lines_len:function}
 function attach_textarea(parent, el)
 	local line_height <const> = 10
+
+	local lines_len = 0
 
 	el = parent:attach(el)
 	local text_area <const> = el:attach(
@@ -11,38 +13,44 @@ function attach_textarea(parent, el)
 	)
 	el:attach_scrollbars { autohide = true }
 
-	local lines = {}
-
-	local function text_at_mouse_position(msg)
-		return lines[ceil(msg.my / line_height)]
+	local function line_at_mouse_position(msg)
+		return ceil(msg.my / line_height)
 	end
 
-	local function is_link(text)
-		return el.is_link != nil and el.is_link(text)
+	local function is_link(line_no)
+		return line_no < lines_len and el.is_link != nil and el.is_link(line_no)
 	end
 
 	function text_area:update(msg)
+		lines_len = el.lines_len()
 		if msg.my == nil then return end -- outside the window
 		local cursor = ""
-		local text = text_at_mouse_position(msg)
-		if is_link(text) then
+		local line = line_at_mouse_position(msg)
+		if is_link(line) then
 			cursor = "pointer"
 		end
 		text_area.cursor = cursor
 	end
 
 	function text_area:click(msg)
-		local text = text_at_mouse_position(msg)
-		if is_link(text) and el.link_click != nil then
-			el.link_click(text)
+		local line = line_at_mouse_position(msg)
+		if is_link(line) and el.link_click != nil then
+			el.link_click(line)
 		end
 	end
 
+	-- for performance reasons draw only visible lines
 	function text_area:draw()
-		local y = 0
-		for _, line in ipairs(lines) do
-			print(line, 0, y, 7)
-			y += line_height
+		local line_no = flr(-text_area.y / line_height)
+
+		text_area.height = line_height * lines_len
+
+		local last_line = line_no + ceil(el.height / line_height)
+		last_line = min(last_line, lines_len - 1)
+
+		for i = line_no, last_line do
+			local line = el.get_line(i + 1)
+			print(line, 0, i * line_height, 7)
 		end
 	end
 
@@ -50,10 +58,8 @@ function attach_textarea(parent, el)
 		self.y += e.wheel_y * 32
 	end
 
-	function el:set_lines(lines_to_draw)
+	function el:scroll_to_the_top()
 		text_area.y = 0
-		lines = lines_to_draw
-		text_area.height = line_height * #lines
 	end
 
 	return el
