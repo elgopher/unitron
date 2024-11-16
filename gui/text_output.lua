@@ -2,13 +2,13 @@
 -- This code is licensed under MIT license (see LICENSE for details)
 
 ---@param el {x:number, y:number, width:number, height:number, is_link:function, link_click:function, get_line:function, lines_len:function}
-function attach_textarea(parent, el)
+function attach_text_output(parent, el)
 	local line_height <const> = 10
 
 	local lines_len = 0
 
 	el = parent:attach(el)
-	local text_area <const> = el:attach(
+	local text_output <const> = el:attach(
 		{ x = 0, y = 0, width = el.width, height = 0 }
 	)
 	el:attach_scrollbars { autohide = true }
@@ -21,7 +21,7 @@ function attach_textarea(parent, el)
 		return line_no < lines_len and el.is_link != nil and el.is_link(line_no)
 	end
 
-	function text_area:update(msg)
+	function text_output:update(msg)
 		lines_len = el.lines_len()
 		if msg.my == nil then return end -- outside the window
 		local cursor = ""
@@ -29,10 +29,10 @@ function attach_textarea(parent, el)
 		if is_link(line) then
 			cursor = "pointer"
 		end
-		text_area.cursor = cursor
+		text_output.cursor = cursor
 	end
 
-	function text_area:click(msg)
+	function text_output:click(msg)
 		local line = line_at_mouse_position(msg)
 		if is_link(line) and el.link_click != nil then
 			el.link_click(line)
@@ -40,10 +40,10 @@ function attach_textarea(parent, el)
 	end
 
 	-- for performance reasons draw only visible lines
-	function text_area:draw()
-		local line_no = flr(-text_area.y / line_height)
+	function text_output:draw()
+		local line_no = flr(-text_output.y / line_height)
 
-		text_area.height = line_height * lines_len
+		text_output.height = line_height * lines_len
 
 		local last_line = line_no + ceil(el.height / line_height)
 		last_line = min(last_line, lines_len - 1)
@@ -54,12 +54,12 @@ function attach_textarea(parent, el)
 		end
 	end
 
-	function text_area:mousewheel(e)
+	function text_output:mousewheel(e)
 		self.y += e.wheel_y * 32
 	end
 
 	function el:scroll_to_the_top()
-		text_area.y = 0
+		text_output.y = 0
 	end
 
 	return el

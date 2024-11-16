@@ -4,7 +4,7 @@
 -- this file contains code controlling GUI of test runner
 
 include "gui/tree.lua"
-include "gui/textarea.lua"
+include "gui/text_output.lua"
 include "gui/lights.lua"
 include "gui/test_summary.lua"
 include "gui/test_toolbar.lua"
@@ -54,7 +54,7 @@ local function start_test(item)
 		return text:match("[^ ]*%.lua:%d+")
 	end
 
-	local textarea = attach_textarea(
+	local text_output = attach_text_output(
 		gui,
 		{
 			x = 0,
@@ -96,7 +96,7 @@ local function start_test(item)
 	local function select_test(test_id)
 		selected_test_id = test_id
 
-		textarea:scroll_to_the_top()
+		text_output:scroll_to_the_top()
 
 		lights:detach()
 		test_summary:detach()
