@@ -7,10 +7,12 @@
 function attach_lights(parent, el)
 	local lights <const> = {}
 	local lights_max = 0
-	local size <const> = 2 -- light size in pixels
+	local size <const> = 3 -- light size in pixels
+	local margin <const> = 1
 
 	el = parent:attach(el)
 
+	---@param no integer Starting from 1
 	function el:set_light(no, color)
 		lights[no] = color
 		lights_max = max(lights_max, no)
@@ -20,10 +22,11 @@ function attach_lights(parent, el)
 		if msg.mx == nil and msg.my == nil then
 			return
 		end
-		local cell = ceil((msg.mx + 1) / (size * 2))
-		local row = ceil(msg.my / (size * 2)) - 1
-		local number_of_cells_in_a_row = el.width / (size * 2)
-		local light = row * number_of_cells_in_a_row + cell
+		local cell = flr(msg.mx / (size + margin))
+		local row = flr(msg.my / (size + margin))
+		local number_of_cells_in_a_row = flr(el.width / (size + margin))
+		local light = row * number_of_cells_in_a_row + cell + 1 -- lights start at 1
+
 		if light > 0 and light <= lights_max then
 			return light
 		end
@@ -55,16 +58,16 @@ function attach_lights(parent, el)
 				light = 0
 			end
 
-			rectfill(x, y, x + size, y + size, light)
+			rectfill(x, y, x + size - 1, y + size - 1, light)
 
-			if x >= el.width then
+			if x + size + margin >= el.width then
 				x = 0
-				y += size * 2
+				y += size + margin
 				if y >= el.height then
 					return
 				end
 			else
-				x += size * 2
+				x += size + margin
 			end
 		end
 	end
