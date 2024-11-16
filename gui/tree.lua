@@ -18,7 +18,7 @@ function attach_tree(parent_el, el)
 	el = parent_el:attach(el)
 
 	local root_node = el:attach(
-		{ width = el.width, height = node_height, x = 0, y = 0 }
+		{ width = el.width, height = 0, x = 0, y = 0 }
 	)
 	root_node.indent = ""
 	el:attach_scrollbars { autohide = true }
@@ -86,15 +86,6 @@ function attach_tree(parent_el, el)
 
 	function el:update_child_text(id, text)
 		nodes_by_id[id].text = text
-	end
-
-	function el:reset()
-		for _, child in ipairs(root_node.child) do
-			child:detach()
-		end
-		root_node.y = 0
-		root_node.height = node_height
-		root_node.height = 0
 	end
 
 	local function child_y_relative_to_root_node(child)
