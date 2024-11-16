@@ -147,7 +147,6 @@ local function start_test(item)
 
 	selected_test_id = nil
 	printed_lines:reset()
-	test_tree:reset()
 
 	local function run_tests_in_seperate_process()
 		runner_pid = create_process(
