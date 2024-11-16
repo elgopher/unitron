@@ -112,7 +112,7 @@ local function start_test(item)
 			x = 8,
 			y = 115,
 			width = 264,
-			height = 78,
+			height = 79,
 			select = function(selected_test)
 				select_test(selected_test)
 				test_tree:select_child(selected_test)
