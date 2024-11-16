@@ -41,6 +41,10 @@ end
 
 -- item has filename and fullpath attributes
 local function start_test(item)
+	if runner_pid != nil then
+		return
+	end
+
 	gui = create_gui()
 
 	cls(7)
@@ -141,12 +145,11 @@ local function start_test(item)
 		}
 	)
 
+	selected_test_id = nil
+	printed_lines:reset()
+	test_tree:reset()
+
 	local function run_tests_in_seperate_process()
-		if runner_pid != nil then
-			return
-		end
-		printed_lines:reset()
-		test_tree:reset()
 		runner_pid = create_process(
 			"runner.lua",
 			{
