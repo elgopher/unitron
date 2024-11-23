@@ -63,5 +63,7 @@ function attach_text_output(parent, el)
 		text_output.y = 0
 	end
 
+	function el:draw() end
+
 	return el
 end
