@@ -3,12 +3,12 @@
 
 -- this file contains code controlling GUI of test runner
 
-include "gui/tree.lua"
 include "gui/text_output.lua"
 include "gui/lights.lua"
 include "gui/test_summary.lua"
 include "gui/test_toolbar.lua"
 include "gui/printed_lines.lua"
+include "gui/tree.lua"
 
 local width <const> = 280
 local height <const> = 200
@@ -65,12 +65,17 @@ local function start_test(item)
 			y = 97,
 			width = width,
 			height = 103,
+			bg_color = 0,
 			lines_len = function()
 				if selected_test_id == nil then return 0 end
 				return printed_lines:lines_len(selected_test_id)
 			end,
 			get_line = function(line_no)
-				return printed_lines:line(selected_test_id, line_no)
+				return {
+					text = printed_lines:line(selected_test_id, line_no),
+					bg_color = 0,
+					fg_color = 7,
+				}
 			end,
 			is_link = function(line_no)
 				local text = printed_lines:line(selected_test_id, line_no)
@@ -100,7 +105,7 @@ local function start_test(item)
 	local function select_test(test_id)
 		selected_test_id = test_id
 
-		text_output:scroll_to_the_top()
+		text_output:scroll_to_line(1)
 
 		lights:detach()
 		test_summary:detach()
@@ -122,11 +127,14 @@ local function start_test(item)
 
 	test_tree = attach_tree(
 		gui,
-		{ x = 0, y = 16, width = width, height = 80 }
+		{
+			x = 0,
+			y = 16,
+			width = width,
+			height = 80,
+			select = select_test
+		}
 	)
-	function test_tree:select(e)
-		select_test(e.id)
-	end
 
 	attach_toolbar(
 		gui,
@@ -328,5 +336,8 @@ function _draw()
 	if gui != nil then
 		cls()
 		gui:draw_all()
+		-- debug fps and memory usage:
+		-- print(stat(7), 250, 0, 1)
+		-- print(stat(0), 220, 10, 1)
 	end
 end

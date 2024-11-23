@@ -1,120 +1,70 @@
---[[pod_format="raw",created="2024-11-09 17:24:35",modified="2024-11-09 17:24:35",revision=0]]
--- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
 ---@param el {x:number,y:number,width:number,height:number,select:function}
 function attach_tree(parent_el, el)
-	local bg_color <const> = 7
-	local fg_color <const> = 13
-	local highlight_bg_color <const> = 1
-	local highlight_fg_color <const> = 7
+	include "gui/tree_provider.lua"
 
-	local node_height <const> = 10
+	local provider <const> = new_tree_provider()
 
-	local nodes_by_id <const> = {}
+	local selected_line = nil
 
-	local selected_child
+	local tree = attach_text_output(parent_el, {
+		x = el.x,
+		y = el.y,
+		width = el.width,
+		height = el.height,
+		bg_color = 7,
+		get_line = function(line_no)
+			local node = provider:get_node(line_no)
+			local whitespace = " "
 
-	el = parent_el:attach(el)
+			local fg_color = 13
+			local bg_color = 7
+			if selected_line != nil and selected_line == line_no then
+				fg_color = 7
+				bg_color = 1
+			end
 
-	local root_node = el:attach(
-		{ width = el.width, height = 0, x = 0, y = 0 }
-	)
-	root_node.indent = ""
-	el:attach_scrollbars { autohide = true }
+			local prefix = whitespace:rep(node.depth * 2)
+			if node.has_children then
+				prefix = prefix .. "[-] "
+			else
+				prefix = prefix .. "    "
+			end
 
-	function el:add_child(id, text, parent_id)
-		local parent
-		if parent_id == nil then
-			parent = root_node
-		else
-			parent = nodes_by_id[parent_id]
-		end
+			local text = prefix .. node.text
 
-
-		local child = parent:attach(
-			{
-				width = parent.width,
-				height = node_height,
-				x = 0,
-				y = parent.height
+			return {
+				text = text,
+				bg_color = bg_color,
+				fg_color = fg_color,
 			}
-		)
-		child.text = text
-		child.indent = parent.indent .. "  "
-		if parent_id == nil then
-			child.indent = "" -- root element should not have an indent
-		end
-		function child:draw(msg)
-			if child == selected_child then
-				pal(bg_color, highlight_bg_color);
-				pal(fg_color, highlight_fg_color)
-			end
-			local prefix = "[-] "
-			if #child.child == 0 then
-				prefix = "    "
-			end
-			rectfill(0, 0, self.width, node_height, bg_color)
-			print(child.indent .. prefix .. self.text, 0, 1, fg_color)
-			pal()
-		end
-
-		function child:click()
-			selected_child = child
-			el:select { id = id }
+		end,
+		is_link = function(line_no)
 			return true
+		end,
+		link_click = function(line_no)
+			selected_line = line_no
+			el.select(provider:get_node(line_no).id)
+		end,
+		lines_len = function()
+			return provider:nodes_len()
 		end
+	})
 
-		local function add_height(parent, h)
-			parent.height += h
-			if parent._parent != nil then
-				add_height(parent._parent, h)
-			end
-		end
-
-		add_height(parent, node_height)
-
-		-- use _parent beause parent is already used by Picotron:
-		child._parent = parent
-		nodes_by_id[id] = child
-		child.cursor = "pointer"
+	function tree:add_child(id, text, parent_id)
+		provider:append_node(parent_id, id, text)
 	end
 
-	function el:draw()
-		rectfill(0, 0, el.width, el.height, bg_color)
+	function tree:update_child_text(id, text)
+		provider:update_node_text(id, text)
 	end
 
-	function el:update_child_text(id, text)
-		nodes_by_id[id].text = text
+	function tree:select_child(id)
+		local line = provider:get_line_no(id)
+		selected_line = line
+		tree:scroll_to_line(line)
 	end
 
-	local function child_y_relative_to_root_node(child)
-		local y = child.y
-		while child.parent != root_node do
-			y += child.parent.y
-			child = child.parent
-		end
-		return y
-	end
-
-	local function scroll_to_child(child)
-		local scroll_root_node =
-			 -child_y_relative_to_root_node(child) + (el.height / 2)
-		if scroll_root_node > 0 then
-			scroll_root_node = 0
-		end
-		local max_scroll = -root_node.height + el.height
-		if scroll_root_node <= max_scroll then
-			scroll_root_node = max_scroll
-		end
-
-		root_node.y = scroll_root_node
-	end
-
-	function el:select_child(id)
-		selected_child = nodes_by_id[id]
-		scroll_to_child(selected_child)
-	end
-
-	return el
+	return tree
 end
