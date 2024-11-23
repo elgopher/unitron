@@ -18,7 +18,8 @@ function attach_text_output(parent, el)
 	end
 
 	local function is_link(line_no)
-		return line_no < lines_len and el.is_link != nil and el.is_link(line_no)
+		return line_no >= 1 and line_no <= lines_len
+			 and el.is_link != nil and el.is_link(line_no)
 	end
 
 	function text_output:update(msg)
