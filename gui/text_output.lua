@@ -1,7 +1,7 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
----@param el {x:number, y:number, width:number, height:number, is_link:function, link_click:function, get_line:function, lines_len:function}
+---@param el {x:number, y:number, width:number, height:number, bg_color:integer, is_link:function, link_click:function, get_line:function, lines_len:function}
 function attach_text_output(parent, el)
 	local line_height <const> = 10
 
@@ -51,7 +51,10 @@ function attach_text_output(parent, el)
 
 		for i = line_no, last_line do
 			local line = el.get_line(i + 1)
-			print(line, 0, i * line_height, 7)
+			rectfill(0, i * line_height,
+				text_output.width, (i + 1) * line_height + 1,
+				line.bg_color)
+			print(line.text, 1, i * line_height + 1, line.fg_color)
 		end
 	end
 
@@ -59,11 +62,21 @@ function attach_text_output(parent, el)
 		self.y += e.wheel_y * 32
 	end
 
-	function el:scroll_to_the_top()
-		text_output.y = 0
+	function el:scroll_to_line(line_no)
+		text_output.y = -(line_height * (line_no - 1))
+		if text_output.y == 0 then
+			return
+		end
+		text_output.y += el.height / 2 - line_height
+		if -text_output.y + el.height > text_output.height then
+			text_output.y = -text_output.height + el.height
+		end
 	end
 
-	function el:draw() end
+	function el:draw()
+		-- draw background (needed when tree height is too low)
+		rectfill(0, 0, el.width, el.height, el.bg_color)
+	end
 
 	return el
 end
