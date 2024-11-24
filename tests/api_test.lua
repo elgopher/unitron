@@ -6,6 +6,13 @@
 include "test.lua"
 include "../api.lua"
 
+local function test_negative(expected_err, f, ...)
+	local success, err = pcall(f, ...)
+	assert(not success)
+	assert(type(err) == "table")
+	assert(err.assert == expected_err)
+end
+
 test("assert_eq", function()
 	test("should fail when not equal", function()
 		local tests = {
@@ -58,8 +65,7 @@ test("assert_eq", function()
 
 		for test_name, case in pairs(tests) do
 			test(test_name, function()
-				local success = pcall(assert_eq, case.left, case.right)
-				assert(not success)
+				test_negative("eq", assert_eq, case.left, case.right)
 			end)
 		end
 	end)
@@ -109,6 +115,78 @@ test("assert_eq", function()
 		for test_name, case in pairs(tests) do
 			test(test_name, function()
 				assert_eq(case.left, case.right)
+			end)
+		end
+	end)
+end)
+
+test("assert_close", function()
+	local function test_invalid_args(assert_func, expected_err)
+		test("should fail for invalid args", function()
+			local tests = {
+				["left nil"] = {
+					left = nil, right = 1, delta = 1,
+				},
+				["right nil"] = {
+					left = 1, right = nil, delta = 1,
+				},
+				["delta nil"] = {
+					left = 1, right = 1, delta = nil,
+				},
+			}
+			for test_name, case in pairs(tests) do
+				test(test_name, function()
+					test_negative(expected_err,
+						assert_func, case.left, case.right, case.delta)
+				end)
+			end
+		end)
+	end
+
+	test_invalid_args(assert_close, "close")
+	test_invalid_args(assert_not_close, "not_close")
+
+	test("not close enough", function()
+		local tests = {
+			integers = {
+				left = 1, right = 2, delta = 0,
+			},
+			floats = {
+				left = 1.1, right = 1.2, delta = 0.01,
+			},
+		}
+		for test_name, case in pairs(tests) do
+			test(test_name, function()
+				test("assert_close", function()
+					test_negative("close",
+						assert_close, case.left, case.right, case.delta)
+				end)
+				test("assert_not_close", function()
+					assert_not_close(case.left, case.right, case.delta)
+				end)
+			end)
+		end
+	end)
+
+	test("close enough", function()
+		local tests = {
+			integers = {
+				left = 1, right = 2, delta = 1
+			},
+			floats = {
+				left = 1.1, right = 1.2, delta = 0.2,
+			}
+		}
+		for test_name, case in pairs(tests) do
+			test(test_name, function()
+				test("assert_close", function()
+					assert_close(case.left, case.right, case.delta)
+				end)
+				test("assert_not_close", function()
+					test_negative("not_close",
+						assert_not_close, case.left, case.right, case.delta
+					)
+				end)
 			end)
 		end
 	end)

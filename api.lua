@@ -1,4 +1,3 @@
---[[pod_format="raw",created="2024-11-24 06:21:15",modified="2024-11-24 06:33:48",revision=3]]
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
@@ -189,7 +188,8 @@ end
 ---@param delta number
 ---@param msg? any message which will be presented in the unitron ui.
 function assert_close(expected, actual, delta, msg)
-	if abs(expected - actual) > delta then
+	local invalid_args = expected == nil or actual == nil or delta == nil
+	if invalid_args or abs(expected - actual) > delta then
 		local err = {
 			assert = "close",
 			expected = tostring(expected), -- TODO Picotron has a bug that small numbers are not properly serialized
@@ -207,7 +207,8 @@ end
 ---@param delta number
 ---@param msg? any message which will be presented in the unitron ui.
 function assert_not_close(not_expected, actual, delta, msg)
-	if abs(not_expected - actual) <= delta then
+	local invalid_args = not_expected == nil or actual == nil or delta == nil
+	if invalid_args or abs(not_expected - actual) <= delta then
 		local err = {
 			assert = "not_close",
 			not_expected = tostring(not_expected), -- TODO Picotron has a bug that small numbers are not properly serialized
