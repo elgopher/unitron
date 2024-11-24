@@ -1,6 +1,8 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
+-- run this file in terminal using file name: ./api_test.lua
+
 include "test.lua"
 include "../api.lua"
 
@@ -44,6 +46,14 @@ test("assert_eq", function()
 				left = userdata('u8', 2, 2),
 				right = userdata('i32', 2, 2),
 			},
+			["nil"] = {
+				left = nil,
+				right = "not nil",
+			},
+			["nil reversed"] = {
+				left = "not nil",
+				right = nil,
+			}
 		}
 
 		for test_name, case in pairs(tests) do
@@ -90,6 +100,10 @@ test("assert_eq", function()
 				left = userdata('u8', 2, 2, "02030405"),
 				right = userdata('u8', 2, 2, "02030405"),
 			},
+			["nil"] = {
+				left = nil,
+				right = nil,
+			}
 		}
 
 		for test_name, case in pairs(tests) do
