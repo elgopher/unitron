@@ -4,9 +4,16 @@
 function attach_tree(parent_el, el)
 	include "gui/tree_provider.lua"
 
+	local char_width <const> = 5
+
 	local provider <const> = new_tree_provider()
 
 	local selected_line = nil
+
+	-- return indent of node in chars
+	local function indent(node)
+		return node.depth * 2
+	end
 
 	local tree = attach_text_output(parent_el, {
 		x = el.x,
@@ -25,9 +32,13 @@ function attach_tree(parent_el, el)
 				bg_color = 1
 			end
 
-			local prefix = whitespace:rep(node.depth * 2)
+			local prefix = whitespace:rep(indent(node))
 			if node.has_children then
-				prefix = prefix .. "[-] "
+				if not node.collapsed then
+					prefix = prefix .. "[-] "
+				else
+					prefix = prefix .. "[+] "
+				end
 			else
 				prefix = prefix .. "    "
 			end
@@ -44,8 +55,14 @@ function attach_tree(parent_el, el)
 			return true
 		end,
 		link_click = function(line_no, msg)
+			local node = provider:get_node(line_no)
+			if node.has_children and
+				 msg.mx >= indent(node) * char_width and
+				 msg.mx <= (indent(node) + 3) * char_width then
+				provider:toggle_line(line_no)
+			end
 			selected_line = line_no
-			el.select(provider:get_node(line_no).id)
+			el.select(node.id)
 		end,
 		lines_len = function()
 			return provider:nodes_len()
