@@ -221,11 +221,11 @@ on_event("test_finished", function(e)
 
 			if err.assert == "eq" then
 				print_line(e.test, "args not equal:")
-				print_line(e.test, "\f5 expect=\f6" .. err.expected)
-				print_line(e.test, "\f5 actual=\f6" .. err.actual)
+				print_line(e.test, "\f5 expect=\f6" .. tostring(err.expected))
+				print_line(e.test, "\f5 actual=\f6" .. tostring(err.actual))
 			elseif err.assert == "not_eq" then
 				print_line(e.test, "args are equal:")
-				print_line(e.test, "\f5 actual=\f6" .. err.actual)
+				print_line(e.test, "\f5 actual=\f6" .. tostring(err.actual))
 			elseif err.assert == "same" then
 				print_line(e.test, "args are not the same:")
 				print_line(e.test, "\f5 expect=\f6" .. err.expected)

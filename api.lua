@@ -1,3 +1,4 @@
+--[[pod_format="raw",created="2024-11-24 06:21:15",modified="2024-11-24 06:33:48",revision=3]]
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
@@ -10,6 +11,10 @@ local function table_len(t)
 end
 
 local function equal(expected, actual, visited_values)
+	if expected == nil or actual == nil then
+		return expected == actual
+	end
+
 	if visited_values == nil then
 		visited_values = {}
 		visited_values[expected] = true

@@ -1,6 +1,8 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
+-- run this file in unitron gui
+
 include "tree_provider.lua"
 
 test("new provider has 0 lines", function()
