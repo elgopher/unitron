@@ -43,7 +43,7 @@ function attach_tree(parent_el, el)
 		is_link = function(line_no)
 			return true
 		end,
-		link_click = function(line_no)
+		link_click = function(line_no, msg)
 			selected_line = line_no
 			el.select(provider:get_node(line_no).id)
 		end,

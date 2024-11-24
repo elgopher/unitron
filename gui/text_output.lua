@@ -36,7 +36,7 @@ function attach_text_output(parent, el)
 	function text_output:click(msg)
 		local line = line_at_mouse_position(msg)
 		if is_link(line) and el.link_click != nil then
-			el.link_click(line)
+			el.link_click(line, msg)
 		end
 	end
 

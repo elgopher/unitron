@@ -81,7 +81,7 @@ local function start_test(item)
 				local text = printed_lines:line(selected_test_id, line_no)
 				return find_lua_file_in_text(text) != nil
 			end,
-			link_click = function(line_no)
+			link_click = function(line_no, msg)
 				local text = printed_lines:line(selected_test_id, line_no)
 
 				local file = find_lua_file_in_text(text)
