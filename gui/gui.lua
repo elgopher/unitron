@@ -183,7 +183,7 @@ on_event("test_started", function(e)
 	if e.test.parent != nil then parent_id = e.test.parent.id end
 	test_tree:add_child(e.test.id, e.test.name .. " (running)", parent_id)
 
-	print_line(e.test, "\f5Running \f7" .. e.test.name)
+	print_line(e.test, "\f6> \f7" .. e.test.name)
 	sfx(1)
 end)
 
