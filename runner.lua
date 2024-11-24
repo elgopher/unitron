@@ -95,7 +95,7 @@ local originalPrint <const> = print
 -- override picotron print, so all text is sent to the parent process
 function print(text, x, y, color)
 	if x == nil and y == nil and color == nil then
-		publish { event = "print", test = tests[#tests], text = text }
+		publish { event = "print", test = tests[#tests], text = tostring(text) }
 	end
 
 	originalPrint(text, x, y, color)
