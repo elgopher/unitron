@@ -85,18 +85,18 @@ end
 
 local function serialize_arg(v)
 	if v == nil then
-		return
+		return nil
 	end
 	local serialized = pod(v)
 	if serialized == nil then
 		if type(v) == "table" then
 			return "[cyclic table]"
-		else
-			return "[not serializable]"
 		end
+		return "[not serializable]"
 	end
 
-	return serialized
+	-- no need to escape ] because meta data is not serialized:
+	return serialized:gsub("\\093", "]") -- TODO unescape all special characters
 end
 
 local function serialize_message(msg)
