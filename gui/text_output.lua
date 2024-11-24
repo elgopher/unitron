@@ -24,6 +24,14 @@ function attach_text_output(parent, el)
 
 	function text_output:update(msg)
 		lines_len = el.lines_len()
+
+		text_output.height = line_height * lines_len
+
+		-- If text_output has decreased, adjust the y position.
+		if text_output.height - el.height < -text_output.y then
+			text_output.y = min(-text_output.height + el.height, 0) -- test this
+		end
+
 		if msg.my == nil then return end -- outside the window
 		local cursor = ""
 		local line = line_at_mouse_position(msg)
@@ -43,8 +51,6 @@ function attach_text_output(parent, el)
 	-- for performance reasons draw only visible lines
 	function text_output:draw()
 		local line_no = flr(-text_output.y / line_height)
-
-		text_output.height = line_height * lines_len
 
 		local last_line = line_no + ceil(el.height / line_height)
 		last_line = min(last_line, lines_len - 1)
