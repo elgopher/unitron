@@ -14,7 +14,7 @@ local function test_negative(expected_err, f, ...)
 end
 
 test("assert_eq", function()
-	test("should fail when not equal", function()
+	test("not equal", function()
 		local tests = {
 			numbers = {
 				left = 10, right = 11,
@@ -65,12 +65,17 @@ test("assert_eq", function()
 
 		for test_name, case in pairs(tests) do
 			test(test_name, function()
-				test_negative("eq", assert_eq, case.left, case.right)
+				test("assert_eq", function()
+					test_negative("eq", assert_eq, case.left, case.right)
+				end)
+				test("assert_not_eq", function()
+					assert_not_eq(case.left, case.right)
+				end)
 			end)
 		end
 	end)
 
-	test("should not fail when equal", function()
+	test("equal", function()
 		local table_with_cycle = {}
 		table_with_cycle.next = table_with_cycle
 
@@ -114,7 +119,13 @@ test("assert_eq", function()
 
 		for test_name, case in pairs(tests) do
 			test(test_name, function()
-				assert_eq(case.left, case.right)
+				test("assert_eq", function()
+					assert_eq(case.left, case.right)
+				end)
+				test("assert_not_eq", function()
+					test_negative("not_eq",
+						assert_not_eq, case.left, case.right)
+				end)
 			end)
 		end
 	end)
