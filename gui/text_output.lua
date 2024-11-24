@@ -58,10 +58,6 @@ function attach_text_output(parent, el)
 		end
 	end
 
-	function text_output:mousewheel(e)
-		self.y += e.wheel_y * 32
-	end
-
 	function el:scroll_to_line(line_no)
 		text_output.y = -(line_height * (line_no - 1))
 		if text_output.y == 0 then
