@@ -337,7 +337,8 @@ function _draw()
 		cls()
 		gui:draw_all()
 		-- debug fps and memory usage:
-		-- print(stat(7), 250, 0, 1)
-		-- print(stat(0), 220, 10, 1)
+		-- local debug_msg = string.format("%.2f", stat(1)) ..
+		-- 	 " - " .. stat(7) .. "FPS, " .. ceil(stat(0) / 1024 / 1024) .. "MB"
+		-- print(debug_msg, 150, 5, 1)
 	end
 end
