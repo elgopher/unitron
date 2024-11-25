@@ -150,6 +150,16 @@ function assert_not_eq(not_expected, actual, msg)
 	end
 end
 
+-- converts v to string optionally adding quotes
+local function as_string(v)
+	local s = tostring(v)
+	if type(v) == "string" then
+		-- append quotes in order to distinguish string from number
+		s = string.format('"%s"', s)
+	end
+	return s
+end
+
 ---@param expected any
 ---@param actual any
 ---@param msg? any message which will be presented in the unitron ui.
@@ -157,10 +167,8 @@ function assert_same(expected, actual, msg)
 	if expected != actual then
 		local err = {
 			assert = "same",
-			-- tostring() is more useful than serialize because pointers have
-			-- more value than values here:
-			expected = tostring(expected),
-			actual = tostring(actual),
+			expected = as_string(expected),
+			actual = as_string(actual),
 			msg = serialize_message(msg),
 			file = get_caller(),
 		}
@@ -175,7 +183,7 @@ function assert_not_same(not_expected, actual, msg)
 	if not_expected == actual then
 		local err = {
 			assert = "not_same",
-			actual = tostring(actual),
+			actual = as_string(actual),
 			msg = serialize_message(msg),
 			file = get_caller(),
 		}
@@ -192,9 +200,9 @@ function assert_close(expected, actual, delta, msg)
 	if invalid_args or abs(expected - actual) > delta then
 		local err = {
 			assert = "close",
-			expected = tostring(expected), -- TODO Picotron has a bug that small numbers are not properly serialized
-			actual = tostring(actual), -- TODO Picotron has a bug that small numbers are not properly serialized
-			delta = tostring(delta), -- TODO Picotron has a bug that small numbers are not properly serialized
+			expected = as_string(expected), -- TODO Picotron has a bug that small numbers are not properly serialized
+			actual = as_string(actual), -- TODO Picotron has a bug that small numbers are not properly serialized
+			delta = as_string(delta), -- TODO Picotron has a bug that small numbers are not properly serialized
 			msg = serialize_message(msg),
 			file = get_caller(),
 		}
@@ -211,9 +219,9 @@ function assert_not_close(not_expected, actual, delta, msg)
 	if invalid_args or abs(not_expected - actual) <= delta then
 		local err = {
 			assert = "not_close",
-			not_expected = tostring(not_expected), -- TODO Picotron has a bug that small numbers are not properly serialized
-			actual = tostring(actual),       -- TODO Picotron has a bug that small numbers are not properly serialized
-			delta = tostring(delta),         -- TODO Picotron has a bug that small numbers are not properly serialized
+			not_expected = as_string(not_expected), -- TODO Picotron has a bug that small numbers are not properly serialized
+			actual = as_string(actual),       -- TODO Picotron has a bug that small numbers are not properly serialized
+			delta = as_string(delta),         -- TODO Picotron has a bug that small numbers are not properly serialized
 			msg = serialize_message(msg),
 			file = get_caller(),
 		}
@@ -240,7 +248,7 @@ function assert_nil(actual, msg)
 	if actual != nil then
 		local err = {
 			assert = "nil",
-			actual = tostring(actual),
+			actual = as_string(actual),
 			msg = serialize_message(msg),
 			file = get_caller(),
 		}
