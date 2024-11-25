@@ -112,8 +112,8 @@ end
 ---For strings, numbers and booleans '==' operator is used.
 ---
 ---For tables, all keys and values are compared deeply.
----If you want to compare if two tables points to the same address in memory
----please use assert_same instead.
+---If you want to check if two variables reference to the same table in memory
+---please use assert(a==b) instead.
 ---Tables could have cycles.
 ---
 ---For userdata, all data is compared and userdata must be of the same type,
@@ -158,37 +158,6 @@ local function as_string(v)
 		s = string.format('"%s"', s)
 	end
 	return s
-end
-
----@param expected any
----@param actual any
----@param msg? any message which will be presented in the unitron ui.
-function assert_same(expected, actual, msg)
-	if expected != actual then
-		local err = {
-			assert = "same",
-			expected = as_string(expected),
-			actual = as_string(actual),
-			msg = serialize_message(msg),
-			file = get_caller(),
-		}
-		error(err)
-	end
-end
-
----@param not_expected any
----@param actual any
----@param msg? any message which will be presented in the unitron ui.
-function assert_not_same(not_expected, actual, msg)
-	if not_expected == actual then
-		local err = {
-			assert = "not_same",
-			actual = as_string(actual),
-			msg = serialize_message(msg),
-			file = get_caller(),
-		}
-		error(err)
-	end
 end
 
 ---@param expected number

@@ -44,8 +44,6 @@ Test API
 * [assert_not_close](#assert_not_close)
 * [assert_nil](#assert_nil)
 * [assert_not_nil](#assert_not_nil)
-* [assert_same](#assert_same)
-* [assert_not_same](#assert_not_same)
 
 Introduction 
 ------------
@@ -91,7 +89,8 @@ Asserts that `expected` and `actual` are equal. Values must have the same type.
 For strings, numbers and booleans `==` operator is used.
 
 For tables, all keys and values are compared deeply. 
-If you want to compare if two tables points to the same address in memory please use [assert_same](#assert_same) instead. 
+If you want to check if two variables reference to the same table in memory
+please use `assert(a==b)` instead.
 Tables could have cycles.
 
 For userdata, all data is compared and userdata must be of the same type, width and height.
@@ -140,29 +139,6 @@ assert_not_nil
 **syntax:** *assert_not_nil(actual, message?)*
 
 Asserts that `actual` is not `nil`.
-
-[Back to TOC](#test-api)
-
-assert_same
------------
-
-**syntax:** *assert_same(expected, actual, message?)*
-
-Asserts that `expected` and `actual` are the same. Same as `==` operator.
-
-For tables, `expected` must be a pointer to the same address as `actual`.
-
-For strings, booleans and numbers the function behaves similar to [assert_eq](#assert_eq).  
-
-
-[Back to TOC](#test-api)
-
-assert_not_same
----------------
-
-**syntax:** *assert_same(not_expected, actual, message?)*
-
-Assert that `not_expected` and `actual` are not the same. The function has similar behavior to [assert_same](#assert_same).
 
 [Back to TOC](#test-api)
 
