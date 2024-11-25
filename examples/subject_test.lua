@@ -42,18 +42,17 @@ test("assert nil", function()
 	assert_nil(v)
 end)
 
--- sometimes you want to be sure that two tables are pointing to the same
--- address in memory
-test("compare pointers", function()
-	local t = { key = "value" }
-	local pointer_to_t = t
-	-- internally assert_same just runs expected==actual:
-	assert_same(t, pointer_to_t)
-end)
-
--- standard assert function can be used too to veryify if argument is true
+-- standard assert function can be used too to verify if argument is true
 test("standard assert aka assert true", function()
 	assert(true)
+end)
+
+-- sometimes you want to be sure that two variables are referencing to the same
+-- table in memory
+test("compare references", function()
+	local t = { key = "value" }
+	local reference_to_t = t
+	assert(t == reference_to_t)
 end)
 
 -- you can nest tests multiple times. This is useful in grouping similar tests.
