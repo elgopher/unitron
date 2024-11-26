@@ -88,6 +88,28 @@ test("table driven tests", function()
 	end
 end)
 
+-- you can write your own custom assert functions
+test("custom assert function", function()
+	local function assert_even(n)
+		-- test_helper() marks the assert_even function as a test helper function.
+		-- When printing file and line information in GUI, this function will be
+		-- skipped.
+		test_helper()
+
+		if n % 2 != 0 then
+			test_fail {
+				-- msg will be presented in the GUI when assertion failed:
+				msg = "arg is not even",
+				-- you can add as many fields as you want. All will be presented
+				-- in the GUI along with msg:
+				actual = n
+			}
+		end
+	end
+
+	assert_even(3) -- change to even number in order to remove assertion error
+end)
+
 -- test can be slow, but don't worry - it does not block the unitron ui
 test("slow test", function()
 	for i = 1, 1000000 do

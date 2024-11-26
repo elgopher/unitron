@@ -211,46 +211,29 @@ on_event("test_finished", function(e)
 		message = "\fbTest successful"
 		color = "\fb"
 	else
-		if err.file != nil then
-			print_line(e.test, "\f8Error \f7at " .. err.file)
+		if err.__traceback != nil and #err.__traceback > 0 then
+			local file = err.__traceback[1]
+			print_line(e.test, "\f8Error \f7at " .. file)
 
 			-- print additional message provided by user
 			if err.msg != nil then
 				print_line(e.test, err.msg)
 			end
 
-			if err.assert == "eq" then
-				print_line(e.test, "args not equal:")
-				print_line(e.test, "\f5 expect=\f6" .. tostring(err.expected))
+			-- always print expected first
+			if err.expect != nil then
+				print_line(e.test, "\f5 expect=\f6" .. tostring(err.expect))
+			end
+			-- then actual
+			if err.actual != nil then
 				print_line(e.test, "\f5 actual=\f6" .. tostring(err.actual))
-			elseif err.assert == "not_eq" then
-				print_line(e.test, "args are equal:")
-				print_line(e.test, "\f5 actual=\f6" .. tostring(err.actual))
-			elseif err.assert == "same" then
-				print_line(e.test, "args are not the same:")
-				print_line(e.test, "\f5 expect=\f6" .. err.expected)
-				print_line(e.test, "\f5 actual=\f6" .. err.actual)
-			elseif err.assert == "not_same" then
-				print_line(e.test, "args are the same:")
-				print_line(e.test, "\f5 actual=\f6" .. err.actual)
-			elseif err.assert == "close" then
-				print_line(e.test, "args not close")
-				print_line(e.test, "\f5 expect=\f6" .. err.expected)
-				print_line(e.test, "\f5 actual=\f6" .. err.actual)
-				print_line(e.test, "\f5 delta =\f6" .. err.delta)
-			elseif err.assert == "not_close" then
-				print_line(e.test, "args too close")
-				print_line(e.test, "\f5 not_ex=\f6" .. err.not_expected)
-				print_line(e.test, "\f5 actual=\f6" .. err.actual)
-				print_line(e.test, "\f5 delta =\f6" .. err.delta)
-			elseif err.assert == "not_nil" then
-				print_line(e.test, "arg is nil")
-			elseif err.assert == "nil" then
-				print_line(e.test, err.actual .. " is not nil")
-			elseif err.assert == "true" then
-				print_line(e.test, "arg is false")
-			elseif err.assert == "false" then
-				print_line(e.test, "arg is true")
+			end
+
+			-- TODO sort alphabetically?
+			for k, v in pairs(err) do
+				if k != "msg" and k != "expect" and k != "actual" and k != "__traceback" then
+					print_line(e.test, "\f5 " .. k .. "=\f6" .. tostring(v))
+				end
 			end
 		end
 

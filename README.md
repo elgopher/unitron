@@ -44,6 +44,8 @@ Test API
 * [assert_not_close](#assert_not_close)
 * [assert_nil](#assert_nil)
 * [assert_not_nil](#assert_not_nil)
+* [test_helper](#test_helper)
+* [test_fail](#test_fail)
 
 Introduction 
 ------------
@@ -139,6 +141,40 @@ assert_not_nil
 **syntax:** *assert_not_nil(actual, message?)*
 
 Asserts that `actual` is not `nil`.
+
+[Back to TOC](#test-api)
+
+test_helper
+-----------
+
+**syntax:** *test_helper()*
+
+`test_helper` marks the calling function as a test helper function.
+When printing file and line information in GUI, that function will be
+skipped.
+
+[Back to TOC](#test-api)
+
+test_fail
+---------
+
+**syntax:** *test_fail(err)*
+
+Generates test error which stops current test execution and shows error to
+the user. In the GUI, the error will be presented together with a file name
+and line number where the `test_fail` function was executed. If you run
+`test_fail` from your own assert function, and want to see a place where this
+assert function was executed instead, please run the [test_helper()](#test_helper) function in the beginning of your assert function:
+```lua
+function custom_assert(....)
+    test_helper() -- mark custom_assert function as test helper
+    if .... then
+        test_fail("message")
+    end
+end
+```
+
+`err` is an error message as a string or a table. All table fields will be presented in the GUI. Table could contain special `msg` field which will always be presented first.
 
 [Back to TOC](#test-api)
 
