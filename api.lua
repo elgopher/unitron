@@ -75,14 +75,6 @@ local function equal(expected, actual, visited_values)
 	return expected == actual
 end
 
-local function get_caller()
-	local traceback = debug.traceback("", 3)
-	local loc = split(traceback, "\n")[3]
-	loc = string.gsub(loc, "(%d+):.*", "%1") -- drop message
-	loc = string.gsub(loc, "\t", "")       -- drop tabulator
-	return loc
-end
-
 local function serialize_arg(v)
 	if v == nil then
 		return nil
@@ -99,11 +91,10 @@ local function serialize_arg(v)
 	return serialized:gsub("\\093", "]") -- TODO unescape all special characters
 end
 
-local function serialize_message(msg)
+local function msg_or(msg, default)
 	if msg == nil then
-		return nil
+		return default
 	end
-
 	return tostring(msg)
 end
 
@@ -121,32 +112,31 @@ end
 ---
 ---@param expected any
 ---@param actual any
----@param msg? any message which will be presented in the unitron ui.
+---@param msg? any message which will be presented in the unitron ui, instead of standard message
 function assert_eq(expected, actual, msg)
+	test_helper()
+
 	if not equal(expected, actual) then
-		local err = {
-			assert = "eq",
-			expected = serialize_arg(expected),
-			actual = serialize_arg(actual),
-			msg = serialize_message(msg),
-			file = get_caller(),
+		test_fail {
+			msg = msg_or(msg, "args not equal"),
+			expect = serialize_arg(expected),
+			actual = serialize_arg(actual)
 		}
-		error(err)
 	end
 end
 
 ---@param not_expected any
 ---@param actual any
----@param msg? any message which will be presented in the unitron ui.
+---@param msg? any message which will be presented in the unitron ui, instead of standard message
 function assert_not_eq(not_expected, actual, msg)
+	test_helper()
+
 	if equal(not_expected, actual) then
-		local err = {
-			assert = "not_eq",
+		test_fail {
+			msg = msg_or(msg, "args are equal"),
+			not_expect = serialize_arg(not_expected),
 			actual = serialize_arg(actual),
-			msg = serialize_message(msg),
-			file = get_caller(),
 		}
-		error(err)
 	end
 end
 
@@ -163,64 +153,60 @@ end
 ---@param expected number
 ---@param actual number
 ---@param delta number
----@param msg? any message which will be presented in the unitron ui.
+---@param msg? any message which will be presented in the unitron ui, instead of standard message
 function assert_close(expected, actual, delta, msg)
+	test_helper()
+
 	local invalid_args = expected == nil or actual == nil or delta == nil
 	if invalid_args or abs(expected - actual) > delta then
-		local err = {
-			assert = "close",
-			expected = as_string(expected), -- TODO Picotron has a bug that small numbers are not properly serialized
+		test_fail {
+			msg = msg_or(msg, "args not close"),
+			expect = as_string(expected), -- TODO Picotron has a bug that small numbers are not properly serialized
 			actual = as_string(actual), -- TODO Picotron has a bug that small numbers are not properly serialized
 			delta = as_string(delta), -- TODO Picotron has a bug that small numbers are not properly serialized
-			msg = serialize_message(msg),
-			file = get_caller(),
 		}
-		error(err)
 	end
 end
 
 ---@param not_expected number
 ---@param actual number
 ---@param delta number
----@param msg? any message which will be presented in the unitron ui.
+---@param msg? any message which will be presented in the unitron ui, instead of standard message
 function assert_not_close(not_expected, actual, delta, msg)
+	test_helper()
+
 	local invalid_args = not_expected == nil or actual == nil or delta == nil
 	if invalid_args or abs(not_expected - actual) <= delta then
-		local err = {
-			assert = "not_close",
-			not_expected = as_string(not_expected), -- TODO Picotron has a bug that small numbers are not properly serialized
-			actual = as_string(actual),       -- TODO Picotron has a bug that small numbers are not properly serialized
-			delta = as_string(delta),         -- TODO Picotron has a bug that small numbers are not properly serialized
-			msg = serialize_message(msg),
-			file = get_caller(),
+		test_fail {
+			msg = msg_or(msg, "args too close"),
+			not_expect = as_string(not_expected), -- TODO Picotron has a bug that small numbers are not properly serialized
+			actual = as_string(actual),     -- TODO Picotron has a bug that small numbers are not properly serialized
+			delta = as_string(delta),       -- TODO Picotron has a bug that small numbers are not properly serialized
 		}
-		error(err)
 	end
 end
 
 ---@param actual any
----@param msg? any message which will be presented in the unitron ui.
+---@param msg? any message which will be presented in the unitron ui, instead of standard message
 function assert_not_nil(actual, msg)
+	test_helper()
+
 	if actual == nil then
-		local err = {
-			assert = "not_nil",
-			msg = serialize_message(msg),
-			file = get_caller(),
+		test_fail {
+			msg = msg_or(msg, "arg is nil")
 		}
-		error(err)
 	end
 end
 
 ---@param actual any
----@param msg? any message which will be presented in the unitron ui.
+---@param msg? any message which will be presented in the unitron ui, instead of standard message
 function assert_nil(actual, msg)
+	test_helper()
+
 	if actual != nil then
-		local err = {
-			assert = "nil",
-			actual = as_string(actual),
-			msg = serialize_message(msg),
-			file = get_caller(),
+		test_fail {
+			msg = msg_or(msg, "arg is not nil"),
+			actual = as_string(actual)
 		}
-		error(err)
 	end
 end
