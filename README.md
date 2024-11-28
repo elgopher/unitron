@@ -1,7 +1,7 @@
 unitron 
 =======
 
-Unit testing in Picotron. Make sure your code work as expected.
+Unit testing in Picotron. Make sure your code works as expected.
 
 ![Screenshot](https://www.lexaloffle.com/media/81157/unitron-0.3.0.gif "unitron")
 
