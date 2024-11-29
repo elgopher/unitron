@@ -187,6 +187,13 @@ on_event("test_started", function(e)
 	sfx(1)
 end)
 
+---@param v any
+local function format_value(v)
+	local s = pod(v)
+	-- no need to escape ] because meta data is not serialized:
+	return s:gsub("\\093", "]") -- TODO unescape all special characters
+end
+
 -- test_finished event is published by the runner process for each started test
 on_event("test_finished", function(e)
 	if e._from != runner_pid then
@@ -222,17 +229,17 @@ on_event("test_finished", function(e)
 
 			-- always print expected first
 			if err.expect != nil then
-				print_line(e.test, "\f5 expect=\f6" .. tostring(err.expect))
+				print_line(e.test, "\f5 expect=\f6" .. format_value(err.expect))
 			end
 			-- then actual
 			if err.actual != nil then
-				print_line(e.test, "\f5 actual=\f6" .. tostring(err.actual))
+				print_line(e.test, "\f5 actual=\f6" .. format_value(err.actual))
 			end
 
 			-- TODO sort alphabetically?
 			for k, v in pairs(err) do
 				if k != "msg" and k != "expect" and k != "actual" and k != "__traceback" then
-					print_line(e.test, "\f5 " .. k .. "=\f6" .. tostring(v))
+					print_line(e.test, "\f5 " .. k .. "=\f6" .. format_value(v))
 				end
 			end
 		end

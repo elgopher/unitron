@@ -75,22 +75,6 @@ local function equal(expected, actual, visited_values)
 	return expected == actual
 end
 
-local function serialize_arg(v)
-	if v == nil then
-		return nil
-	end
-	local serialized = pod(v)
-	if serialized == nil then
-		if type(v) == "table" then
-			return "[cyclic table]"
-		end
-		return "[not serializable]"
-	end
-
-	-- no need to escape ] because meta data is not serialized:
-	return serialized:gsub("\\093", "]") -- TODO unescape all special characters
-end
-
 local function msg_or(msg, default)
 	if msg == nil then
 		return default
@@ -119,8 +103,8 @@ function assert_eq(expected, actual, msg)
 	if not equal(expected, actual) then
 		test_fail {
 			msg = msg_or(msg, "args not equal"),
-			expect = serialize_arg(expected),
-			actual = serialize_arg(actual)
+			expect = expected,
+			actual = actual
 		}
 	end
 end
@@ -134,20 +118,10 @@ function assert_not_eq(not_expected, actual, msg)
 	if equal(not_expected, actual) then
 		test_fail {
 			msg = msg_or(msg, "args are equal"),
-			not_expect = serialize_arg(not_expected),
-			actual = serialize_arg(actual),
+			not_expect = not_expected,
+			actual = actual,
 		}
 	end
-end
-
--- converts v to string optionally adding quotes
-local function as_string(v)
-	local s = tostring(v)
-	if type(v) == "string" then
-		-- append quotes in order to distinguish string from number
-		s = string.format('"%s"', s)
-	end
-	return s
 end
 
 ---@param expected number
@@ -161,9 +135,9 @@ function assert_close(expected, actual, delta, msg)
 	if invalid_args or abs(expected - actual) > delta then
 		test_fail {
 			msg = msg_or(msg, "args not close"),
-			expect = as_string(expected), -- TODO Picotron has a bug that small numbers are not properly serialized
-			actual = as_string(actual), -- TODO Picotron has a bug that small numbers are not properly serialized
-			delta = as_string(delta), -- TODO Picotron has a bug that small numbers are not properly serialized
+			expect = expected,
+			actual = actual,
+			delta = delta,
 		}
 	end
 end
@@ -179,9 +153,9 @@ function assert_not_close(not_expected, actual, delta, msg)
 	if invalid_args or abs(not_expected - actual) <= delta then
 		test_fail {
 			msg = msg_or(msg, "args too close"),
-			not_expect = as_string(not_expected), -- TODO Picotron has a bug that small numbers are not properly serialized
-			actual = as_string(actual),     -- TODO Picotron has a bug that small numbers are not properly serialized
-			delta = as_string(delta),       -- TODO Picotron has a bug that small numbers are not properly serialized
+			not_expect = not_expected,
+			actual = actual,
+			delta = delta,
 		}
 	end
 end
@@ -206,7 +180,7 @@ function assert_nil(actual, msg)
 	if actual != nil then
 		test_fail {
 			msg = msg_or(msg, "arg is not nil"),
-			actual = as_string(actual)
+			actual = actual
 		}
 	end
 end
