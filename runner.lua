@@ -82,6 +82,33 @@ function test(name, test)
 			}
 		end
 
+		local function prepare_to_send(value)
+			if value == nil then
+				return nil
+			end
+
+			if type(value) == "number" then
+				-- picotron is not able to send small numbers, like 0.000001
+				return tostring(value)
+			end
+
+			if pod(value) == nil then
+				if type(value) == "table" then
+					-- picotron crashes on cyclic tables
+					return "[not serializable - cyclic table]"
+				end
+				return "[not serializable]"
+			end
+
+			-- send the original value, Picotron will handle the serialization:
+			return value
+		end
+
+		-- Ensure all values can be sent to different process:
+		for key, value in pairs(err) do
+			err[key] = prepare_to_send(value)
+		end
+
 		set_error_on_parents(parent, "nested test failed")
 	end
 
