@@ -11,6 +11,7 @@ function attach_lights(parent, el)
 	local margin <const> = 1
 
 	el = parent:attach(el)
+	el.visible = true -- Picotron's hidden field is broken
 
 	---@param no integer Starting from 1
 	function el:set_light(no, color)
@@ -34,6 +35,10 @@ function attach_lights(parent, el)
 	end
 
 	function el:update(msg)
+		if not el.visible then
+			return
+		end
+
 		if light_at_cursor_pointer(msg) != nil then
 			el.cursor = "pointer"
 		else
@@ -42,6 +47,10 @@ function attach_lights(parent, el)
 	end
 
 	function el:click(msg)
+		if not el.visible then
+			return
+		end
+
 		local light = light_at_cursor_pointer(msg)
 		if light != nil then
 			el.select(light)
@@ -49,6 +58,10 @@ function attach_lights(parent, el)
 	end
 
 	function el:draw()
+		if not el.visible then
+			return
+		end
+
 		rectfill(0, 0, el.width, el.height, 0)
 		local x, y = 0, 0
 

@@ -61,8 +61,13 @@ function attach_tree(parent_el, el)
 				 msg.mx <= (indent(node) + 3) * char_width then
 				provider:toggle_line(line_no)
 			end
-			selected_line = line_no
-			el.select(node.id)
+			if selected_line != line_no then
+				selected_line = line_no
+				el.select(node.id)
+			else
+				selected_line = nil
+				el.select(nil)
+			end
 		end,
 		lines_len = function()
 			return provider:nodes_len()

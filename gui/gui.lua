@@ -105,10 +105,15 @@ local function start_test(item)
 	local function select_test(test_id)
 		selected_test_id = test_id
 
-		text_output:scroll_to_line(1)
+		if test_id != nil then
+			text_output:scroll_to_line(1)
 
-		lights:detach()
-		test_summary:detach()
+			test_summary.visible = false
+			lights.visible = false
+		else
+			test_summary.visible = true
+			lights.visible = true
+		end
 	end
 
 	lights = attach_lights(

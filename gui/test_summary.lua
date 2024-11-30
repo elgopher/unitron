@@ -6,8 +6,13 @@ function attach_test_summary(parent, el)
 	local succeeded, failed = 0, 0
 
 	el = parent:attach(el)
+	el.visible = true -- Picotron's hidden field is broken
 
 	function el:draw()
+		if not el.visible then
+			return
+		end
+
 		rectfill(0, 0, el.width, el.height, 0)
 		color(26)
 		print("Succeeded: " .. succeeded .. " \f8 Failed: " .. failed)
