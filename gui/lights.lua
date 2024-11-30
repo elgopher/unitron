@@ -11,12 +11,21 @@ function attach_lights(parent, el)
 	local margin <const> = 1
 
 	el = parent:attach(el)
-	el.visible = true -- Picotron's hidden field is broken
+	el.height_before_hide = el.height
 
 	---@param no integer Starting from 1
 	function el:set_light(no, color)
 		lights[no] = color
 		lights_max = max(lights_max, no)
+	end
+
+	-- Picotron's hidden field is broken
+	function el:set_visible(v)
+		if not v then
+			el.height = 0
+		else
+			el.height = el.height_before_hide
+		end
 	end
 
 	local function light_at_cursor_pointer(msg)
@@ -35,10 +44,6 @@ function attach_lights(parent, el)
 	end
 
 	function el:update(msg)
-		if not el.visible then
-			return
-		end
-
 		if light_at_cursor_pointer(msg) != nil then
 			el.cursor = "pointer"
 		else
@@ -47,10 +52,6 @@ function attach_lights(parent, el)
 	end
 
 	function el:click(msg)
-		if not el.visible then
-			return
-		end
-
 		local light = light_at_cursor_pointer(msg)
 		if light != nil then
 			el.select(light)
@@ -58,10 +59,6 @@ function attach_lights(parent, el)
 	end
 
 	function el:draw()
-		if not el.visible then
-			return
-		end
-
 		rectfill(0, 0, el.width, el.height, 0)
 		local x, y = 0, 0
 

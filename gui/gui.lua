@@ -108,11 +108,11 @@ local function start_test(item)
 		if test_id != nil then
 			text_output:scroll_to_line(1)
 
-			test_summary.visible = false
-			lights.visible = false
+			test_summary:set_visible(false)
+			lights:set_visible(false)
 		else
-			test_summary.visible = true
-			lights.visible = true
+			test_summary:set_visible(true)
+			lights:set_visible(true)
 		end
 	end
 
