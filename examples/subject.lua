@@ -3,28 +3,18 @@
 
 -- this file is "production" code which will be tested by subject_test.lua
 
----@param left string
----@param right string
----@return string
 function concat(left, right)
 	return left .. right
 end
 
----@param left number
----@param right number
----@return number
 function divide(left, right)
 	return left / right
 end
 
----@param left number
----@param right number
----@return number
 function add_numbers(left, right)
 	return left + right
 end
 
----@return table
 function new_player()
 	local player = { position = 0 }
 	function player:collides(other_player)
