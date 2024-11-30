@@ -312,7 +312,28 @@ function _init()
 			fullpath = "examples/subject_test.lua",
 		}
 	else
-		print("Please drag'n'drop test file here", 59, 95, 7)
+		gui = create_gui()
+		local label = gui:attach {
+			x = 59, y = 75, width = 200, height = 20,
+		}
+		function label:draw()
+			print("Please drag'n'drop test file here", 0, 0, 7)
+		end
+
+		local examples_btn = gui:attach_button {
+			label = "don't have it? open examples",
+			x = 65,
+			y = 105
+		}
+		function examples_btn:click()
+			create_process(
+				"/system/apps/filenav.p64",
+				{
+					argv = { env().prog_name .. "/examples/" },
+				}
+			)
+		end
+
 		on_event("drop_items", function(msg)
 			stop_test()
 			local item = msg.items[1]
