@@ -73,6 +73,9 @@ function attach_text_output(parent, el)
 		if -text_output.y + el.height > text_output.height then
 			text_output.y = -text_output.height + el.height
 		end
+		if text_output.y > 0 then
+			text_output.y = 0
+		end
 	end
 
 	function el:draw()
