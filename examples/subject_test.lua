@@ -43,7 +43,8 @@ test("assert nil", function()
 end)
 
 -- standard assert function can be used too to verify if argument is true
-test("standard assert aka assert true", function()
+-- or not nil
+test("standard assert", function()
 	assert(true)
 end)
 
@@ -99,7 +100,7 @@ test("custom assert function", function()
 		if n % 2 != 0 then
 			test_fail {
 				-- msg will be presented in the GUI when assertion failed:
-				msg = "arg is not even",
+				msg = "Arg is not even",
 				-- you can add as many fields as you want. All will be presented
 				-- in the GUI along with msg:
 				actual = n

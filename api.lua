@@ -102,7 +102,7 @@ function assert_eq(expected, actual, msg)
 
 	if not equal(expected, actual) then
 		test_fail {
-			msg = msg_or(msg, "args not equal"),
+			msg = msg_or(msg, "Args not equal"),
 			expect = expected,
 			actual = actual
 		}
@@ -117,7 +117,7 @@ function assert_not_eq(not_expected, actual, msg)
 
 	if equal(not_expected, actual) then
 		test_fail {
-			msg = msg_or(msg, "args are equal"),
+			msg = msg_or(msg, "Args are equal"),
 			not_expect = not_expected,
 			actual = actual,
 		}
@@ -134,7 +134,7 @@ function assert_close(expected, actual, delta, msg)
 	local invalid_args = expected == nil or actual == nil or delta == nil
 	if invalid_args or abs(expected - actual) > delta then
 		test_fail {
-			msg = msg_or(msg, "args not close"),
+			msg = msg_or(msg, "Args not close"),
 			expect = expected,
 			actual = actual,
 			delta = delta,
@@ -152,7 +152,7 @@ function assert_not_close(not_expected, actual, delta, msg)
 	local invalid_args = not_expected == nil or actual == nil or delta == nil
 	if invalid_args or abs(not_expected - actual) <= delta then
 		test_fail {
-			msg = msg_or(msg, "args too close"),
+			msg = msg_or(msg, "Args too close"),
 			not_expect = not_expected,
 			actual = actual,
 			delta = delta,
@@ -167,7 +167,7 @@ function assert_not_nil(actual, msg)
 
 	if actual == nil then
 		test_fail {
-			msg = msg_or(msg, "arg is nil")
+			msg = msg_or(msg, "Arg is nil")
 		}
 	end
 end
@@ -179,7 +179,7 @@ function assert_nil(actual, msg)
 
 	if actual != nil then
 		test_fail {
-			msg = msg_or(msg, "arg is not nil"),
+			msg = msg_or(msg, "Arg is not nil"),
 			actual = actual
 		}
 	end

@@ -76,6 +76,9 @@ function test(name, test)
 				msg = err:sub(#file + 1, #err)
 				file = file:sub(1, #file - 2) -- drop ": "
 			end
+			if msg == "assertion failed!" then
+				msg = "Assertion failed"
+			end
 			err = {
 				__traceback = { file },
 				msg = msg,
