@@ -2,6 +2,8 @@
 -- This code is licensed under MIT license (see LICENSE for details)
 
 -- run this file in terminal using file name: ./api_test.lua
+-- this file deliberately does not use Unitron, but test.lua because it tests
+-- Unitron API.
 
 include "test.lua"
 include "../api.lua"
