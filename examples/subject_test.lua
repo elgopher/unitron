@@ -1,6 +1,8 @@
 -- (c) 2024 Jacek Olszak
 -- This code is licensed under MIT license (see LICENSE for details)
 
+-- Drag and drop this file into Unitron window to start the test.
+
 include "subject.lua" -- include the "production" code which will be tested here
 
 -- test function starts a test with given name. Code of the test is provided
