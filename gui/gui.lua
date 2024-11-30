@@ -307,7 +307,7 @@ function _init()
 			fullpath = "examples/subject_test.lua",
 		}
 	else
-		print("please drag'n'drop test file here")
+		print("Please drag'n'drop test file here", 59, 95, 7)
 		on_event("drop_items", function(msg)
 			stop_test()
 			local item = msg.items[1]
