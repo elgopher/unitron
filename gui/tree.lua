@@ -60,7 +60,12 @@ function attach_tree(parent_el, el)
 				 msg.mx >= indent(node) * char_width and
 				 msg.mx <= (indent(node) + 3) * char_width then
 				provider:toggle_line(line_no)
+
+				selected_line = line_no
+				el.select(node.id)
+				return
 			end
+
 			if selected_line != line_no then
 				selected_line = line_no
 				el.select(node.id)
