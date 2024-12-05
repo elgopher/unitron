@@ -326,10 +326,16 @@ function _init()
 			y = 105
 		}
 		function examples_btn:click()
+			local dir = env().corun_program or env().prog_name
+			if dir == "/ram/cart/main.lua" then
+				dir = "/ram/cart"
+			end
+			dir = dir .. "/examples"
+
 			create_process(
 				"/system/apps/filenav.p64",
 				{
-					argv = { env().prog_name .. "/examples/" },
+					argv = { dir },
 				}
 			)
 		end
